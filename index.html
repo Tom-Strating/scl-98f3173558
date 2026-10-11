@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Summa cum Laura</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Summa cum Laura">
+<meta name="theme-color" content="#cfeeda">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f3f8f6; --card:#fff; --ink:#15232d; --mute:#6c7c88; --line:#e2ebe7; --soft:#f1f7f4;
+  --blue:#2b6cf0; --blue-d:#1f55c6; --blue-soft:#e9f1ff; --green:#4fcb93; --green-d:#1f9b66; --green-soft:#e6f8ee;
+  --coral:#f08a6b; --coral-soft:#fdeee9; --bad:#d6452f;
+  --shadow:0 1px 2px rgba(21,35,45,.05),0 6px 20px rgba(21,35,45,.05);
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:linear-gradient(155deg,#cfeeda 0%,#e6f7ea 40%,#eefaf0 60%,#d3efe4 100%) fixed;color:var(--ink);font:14px/1.45 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+h1,h2,h3{margin:0;line-height:1.2;font-weight:650} h2{font-size:22px;letter-spacing:-.01em} h3{font-size:15px}
+p{margin:10px 0}
+button,input,select,textarea{font:inherit;color:inherit}
+header.top{background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 24px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+.logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--blue))}
+header.top h1{font-size:16px;margin-right:10px}
+.grow{flex:1}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 13px;cursor:pointer;white-space:nowrap;font-weight:550;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--blue);color:var(--blue)}
+.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff} .btn.pri:hover{background:var(--blue-d);color:#fff}
+.btn.ghost{border-color:transparent;background:none;color:var(--blue)}
+.btn.danger{color:var(--bad)} .btn.danger:hover{border-color:var(--bad);color:var(--bad)}
+.btn.sm{padding:4px 9px;font-size:13px;border-radius:8px}
+.link{background:none;border:0;padding:0;color:var(--blue-d);cursor:pointer;text-align:left;font-weight:600}
+.link:hover{text-decoration:underline}
+select,input:not([type=checkbox]):not([type=range]),textarea{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:6px 10px}
+header.top select{border-radius:999px;background:var(--green-soft);border-color:transparent;font-weight:600;padding:7px 12px}
+input:focus,select:focus,textarea:focus,button:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+input[type=range]{accent-color:var(--blue);width:100%}
+input[type=checkbox]{accent-color:var(--green-d);width:16px;height:16px;vertical-align:-3px}
+main{max-width:1240px;margin:0 auto;padding:20px 24px 70px}
+.pills{display:inline-flex;gap:4px;background:rgba(31,155,102,.13);border-radius:12px;padding:4px;flex-wrap:wrap}
+.pills button{border:0;background:none;padding:7px 14px;border-radius:9px;cursor:pointer;font-weight:600;color:var(--mute)}
+.pills button.on{background:var(--card);color:var(--blue-d);box-shadow:0 1px 3px rgba(21,35,45,.12)}
+.pills.sm button{padding:5px 11px;font-size:13px}
+.pills small{font-weight:500;opacity:.75;margin-left:4px}
+.bar-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.ch{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:18px;align-items:start}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px}
+.tile{background:var(--card);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.tile b{display:block;font-size:26px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tile span{color:var(--mute);font-size:12.5px}
+.tile.g{background:linear-gradient(135deg,#eafaf1,#fff)} .tile.b{background:linear-gradient(135deg,#eaf1ff,#fff)}
+.card .tile{box-shadow:none;background:var(--soft)}
+textarea{width:100%;resize:vertical}
+.note{color:var(--green-d);cursor:help;margin-left:5px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+th{font-size:12px;color:var(--mute);font-weight:600;vertical-align:bottom}
+tr:last-child td{border-bottom:0}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:1}
+tfoot td{font-weight:650;border-top:2px solid var(--line);color:var(--mute)}
+th small{display:block;font-weight:400}
+input.cell{width:56px;text-align:center;padding:5px 2px}
+input.cell.bad{border-color:var(--bad);background:var(--coral-soft)}
+.mute{color:var(--mute)} .warn{color:var(--bad)} .small{font-size:12.5px}
+.badge{display:inline-block;min-width:30px;background:var(--green-soft);color:var(--green-d);border-radius:7px;padding:2px 8px;font-weight:700}
+.badge.u{background:var(--coral-soft);color:#c2553a}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--mute)}
+label.f>*{font-size:14px;color:var(--ink)}
+.sl{display:grid;grid-template-columns:minmax(120px,190px) 1fr 58px;gap:12px;align-items:center;margin:10px 0}
+.sl b{text-align:right;font-variant-numeric:tabular-nums}
+.tip{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--blue-soft);color:var(--blue-d);font-size:11px;font-weight:700;cursor:help;position:relative;flex:none}
+.tip:hover::after,.tip:focus::after{content:attr(data-tip);position:absolute;top:calc(100% + 7px);left:-10px;background:var(--ink);color:#fff;padding:9px 12px;border-radius:10px;width:max-content;max-width:300px;white-space:normal;font-weight:400;font-size:12.5px;line-height:1.4;z-index:40;text-align:left;box-shadow:var(--shadow)}
+svg.chart{width:100%;height:auto;display:block}
+svg .bar{fill:var(--green)} svg .bar.u{fill:var(--coral)} svg text{fill:var(--ink);font-size:11px;font-weight:600} svg .ax{stroke:var(--line)} svg .tl{fill:var(--mute);font-weight:400}
+svg .ln{fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linejoin:round} svg .ln2{fill:none;stroke:#a9b8c2;stroke-width:1.5;stroke-dasharray:4 4} svg .dot{fill:#fff;stroke:var(--blue);stroke-width:2.5}
+.qbar{display:inline-block;height:8px;background:var(--green);border-radius:4px;vertical-align:middle}
+.menu{position:relative} .menu summary{list-style:none} .menu summary::-webkit-details-marker{display:none}
+.pop{position:absolute;right:0;top:calc(100% + 6px);background:var(--card);border-radius:12px;box-shadow:0 8px 30px rgba(21,35,45,.16);padding:6px;min-width:210px;z-index:30;display:flex;flex-direction:column}
+.pop button{border:0;background:none;text-align:left;padding:8px 12px;border-radius:8px;cursor:pointer}
+.pop button:hover{background:var(--blue-soft);color:var(--blue-d)}
+.pop small{padding:6px 12px;color:var(--mute)}
+dialog{border:0;border-radius:18px;background:var(--card);color:var(--ink);padding:24px;width:min(520px,92vw);box-shadow:0 20px 60px rgba(21,35,45,.25)}
+dialog::backdrop{background:rgba(21,35,45,.35)}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 18px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50;max-width:90vw}
+#toast.on{opacity:1}
+@media (pointer:coarse){input:not([type=checkbox]):not([type=range]),select,textarea{font-size:16px!important}input.cell{width:64px;padding:8px 2px}.btn.sm{padding:7px 11px}.tip{width:22px;height:22px}}
+.empty{text-align:center;color:var(--mute);padding:26px 10px}
+#print{display:none}
+@page{size:A4;margin:15mm 14mm 17mm;@bottom-right{content:counter(page) " / " counter(pages);font:8pt "Segoe UI",sans-serif;color:#7a8a95}@bottom-left{content:"Summa cum Laura";font:8pt "Segoe UI",sans-serif;color:#7a8a95}}
+@page wide{size:A4 landscape}
+@media print{
+  body{background:#fff;color:#15232d;font-size:9.5pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #app,#toast,dialog{display:none!important}
+  #print{display:block}
+  #print .ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5pt solid #4fcb93;padding-bottom:7pt;margin-bottom:14pt}
+  #print h1{font-size:18pt} #print .meta{color:#6c7c88;font-size:9pt;margin-top:2pt} #print .brand{color:#1f55c6;font-weight:700;font-size:10pt}
+  #print article{margin-bottom:16pt} #print article.page{break-before:page} #print article.keep{break-inside:avoid} #print article.wide{page:wide}
+  #print h2{font-size:13pt;color:#1f55c6;margin:0 0 7pt;padding-left:7pt;border-left:3pt solid #4fcb93}
+  #print h3{break-after:avoid;font-size:8pt;text-transform:uppercase;letter-spacing:.06em;color:#6c7c88;margin:11pt 0 4pt}
+  #print section{break-inside:avoid} #print section.long{break-inside:auto}
+  #print table{font-size:8.5pt;min-width:50%}
+  #print th{background:#e9f1ff;color:#1d3b7a;padding:3.5pt 7pt;border-bottom:1pt solid #b9cdf2;position:static;font-size:8pt}
+  #print td{padding:3pt 7pt;border-bottom:.5pt solid #e2ebe7;position:static;background:none}
+  #print tbody tr:nth-child(even) td{background:#f5faf7}
+  #print tr{break-inside:avoid} #print thead{display:table-header-group}
+  #print tr.foot td{font-weight:700;border-top:1pt solid #b9cdf2;background:#fff}
+  #print .kv{display:grid;gap:5pt}
+  #print table.tight td{padding:3pt 2pt;min-width:8.5mm} #print table.side td:first-child{font-weight:700;color:#1d3b7a;background:#e9f1ff;padding:3pt 7pt}
+  #print .kv div{background:#f1f8f4;border-radius:5pt;padding:5pt 8pt} #print .kv b{display:block;font-size:12pt} #print .kv span{font-size:7.5pt;color:#6c7c88}
+  #print .duo{display:flex;gap:16pt;align-items:flex-start} #print .duo svg{width:92mm;flex:none}
+  #print svg .bar{fill:#4fcb93} #print svg .bar.u{fill:#f08a6b}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="print"></div>
+<div id="toast"></div>
+<dialog id="dlg"></dialog>
+<input type="file" id="file" accept=".json,application/json" hidden>
+<input type="file" id="csv" accept=".csv,.txt,text/csv" hidden>
+<script>
+'use strict';
+/* ============ Grundlagen ============ */
+const STORE='notentool.v1';
+const NOTE=['6','5-','5','5+','4-','4','4+','3-','3','3+','2-','2','2+','1-','1','1+'];   // Index = Punkte 0–15
+const SYM=[{v:'-',l:'−'},{v:'o',l:'○'},{v:'+',l:'+'},{v:'++',l:'++'}];
+const DEFKEY={16:[0,20,27,33,40,45,50,55,60,65,70,75,80,85,90,95],6:[0,20,40,55,70,85],4:[0,40,65,85]};
+const SCALES={noten:'Noten 1–6',punkte:'Punkte 0–15',symbole:'++ / + / ○ / −'};
+const MODES=[['direct','Direkte Bewertung'],['tasks','Aufgaben mit Punkten'],['tgrades','Aufgaben mit Noten']];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const uid=()=>Math.random().toString(36).slice(2,10);
+const today=()=>new Date().toISOString().slice(0,10);
+const fdate=d=>d?d.split('-').reverse().join('.'):'';
+const fm=(x,d=2)=>x==null||isNaN(x)?'–':x.toFixed(d).replace('.',',');
+const de=x=>String(x).replace('.',',');
+const r2=x=>x==null?'':Math.round(x*100)/100;
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+
+let db=load(), ui={tab:'overview',detail:null,sub:'stats',cat:null,set:'course',ovd:false,sf:'all'}, memo=new Map();
+function migrate(d){      // ältere Datenbestände auf den aktuellen Aufbau bringen
+  for(const c of d.courses){
+    if(!c.periods?.length){c.periods=[{id:uid(),name:'1. Halbjahr'}];}
+    if(!c.periods.some(p=>p.id===c.period))c.period=c.periods[0].id;
+    if(!c.categories.some(k=>k.oral)){const k=c.categories.find(k=>/m[üu]ndl/i.test(k.name));if(k)k.oral=true;else c.categories.push({id:uid(),name:'Mündliche Noten',weight:0,oral:true,assessments:[]});}
+    for(const k of c.categories)for(const a of k.assessments){if(!c.periods.some(p=>p.id===a.period))a.period=c.periods[0].id;a.tg??={};a.points??={};a.tasks??=[];a.grades??={};a.key??={mode:'auto'};}
+  }return d;
+}
+function load(){try{const j=JSON.parse(localStorage.getItem(STORE));if(j&&Array.isArray(j.courses))return migrate(j);}catch(e){}return{version:2,courses:[],active:null,lastBackup:null};}
+let saveT;function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(STORE,JSON.stringify(db));}catch(e){toast('Achtung: Speichern im Browser fehlgeschlagen – bitte Daten sichern!');}},120);}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),3500);}
+const course=()=>db.courses.find(c=>c.id===db.active)||null;
+function findA(c,aid){for(const cat of c.categories){const a=cat.assessments.find(x=>x.id===aid);if(a)return{cat,a};}return{};}
+const sortedA=(c,cat)=>cat.assessments.filter(a=>a.period===c.period).sort((a,b)=>(a.date||'').localeCompare(b.date||''));   // nur aktueller Zeitraum
+const pName=c=>c.periods.find(p=>p.id===c.period)?.name??'';
+function inPeriod(c,pid,fn){const o=c.period;c.period=pid;try{return fn();}finally{c.period=o;}}
+
+/* ============ Skalen ============ */
+const isNum=c=>c.scale!=='symbole';
+const G=(c,a)=>isNum(c)?a.grades:(a.sym??={});      // Symbol-Bewertungen liegen getrennt von Noten/Punkten
+function levels(c){
+  if(c.scale==='punkte')return NOTE.map((_,p)=>({v:p,l:String(p)}));
+  if(c.scale==='noten')return (c.tendenz?NOTE.map((_,p)=>p):[0,2,5,8,11,14]).map(p=>({v:p,l:NOTE[p]}));
+  return SYM;
+}
+const rank=(c,v)=>isNum(c)?v:SYM.findIndex(s=>s.v===v);
+const above=(c,v)=>rank(c,v)>=rank(c,c.strich[c.scale]);
+const validV=(c,v)=>v==='nb'||(isNum(c)?typeof v==='number':SYM.some(s=>s.v===v));
+function fmt(c,v){if(v==null)return'';if(v==='nb')return'n. b.';if(c.scale==='punkte')return String(v);if(c.scale==='noten')return NOTE[v];return SYM.find(s=>s.v===v)?.l??'';}
+function parse(c,str){
+  const s=String(str).trim().toLowerCase();if(!s)return null;
+  if(['nb','n.b.','n. b.','n','x','/'].includes(s))return'nb';
+  if(c.scale==='punkte')return /^\d{1,2}$/.test(s)&&+s<=15?+s:undefined;
+  if(c.scale==='noten'){const m=s.replace('−','-').match(/^([1-6])\s*([+-]?)$/);if(!m)return undefined;if(m[1]==='6')return 0;const i=NOTE.indexOf(m[1]+(c.tendenz?m[2]:''));return i<0?undefined:i;}
+  const map={'++':'++','+':'+','o':'o','0':'o','○':'o','-':'-','−':'-'};return map[s];
+}
+const num=(c,v)=>c.scale==='noten'?(v===0?6:(17-v)/3):v;           // Rechenwert: Dezimalnote bzw. Punkte
+const whole=v=>v>=13?1:v>=10?2:v>=7?3:v>=4?4:v>=1?5:6;
+const better=(c,a,b)=>c.scale==='noten'?a<b:a>b;
+function roundLevel(c,x){            // Mittelwert -> nächstliegende Stufe (bei Gleichstand: Noten zur schlechteren, Punkte zur besseren)
+  if(x==null)return null;const L=levels(c),o=c.scale==='noten'?L:[...L].reverse();let best=o[0],d=Infinity;
+  for(const l of o){const e=Math.abs(num(c,l.v)-x);if(e<d-1e-9){d=e;best=l;}}return best.v;
+}
+const xval=(c,v)=>v==null?'':c.scale==='punkte'&&v!=='nb'?v:fmt(c,v);
+const hint=c=>c.scale==='noten'?`1–6${c.tendenz?' mit + oder − (z. B. 2+, 3-)':''}`:c.scale==='punkte'?'0–15':'++, +, o, -';
+
+/* ============ Aufgaben, Gewichtung & Notenschlüssel ============ */
+const wOf=(a,t)=>a.mode==='tasks'&&!a.customW?(+t.max||0):(+t.weight||0);
+const share=(a,t)=>{const s=a.tasks.reduce((x,y)=>x+wOf(a,y),0);return s?wOf(a,t)/s*100:0;};
+function taskPct(a,sid){             // Aufgaben mit Punkten: gewichteter Prozentwert
+  const pts=a.points?.[sid];if(!pts)return null;let any=false,sum=0,ws=0;
+  for(const t of a.tasks){if(!(t.max>0))continue;const w=wOf(a,t);ws+=w;const p=pts[t.id];if(p!=null){any=true;sum+=p/t.max*w;}}
+  if(!any||!ws)return null;const pct=sum/ws*100;return a.key.roundPct===false?Math.round(pct*10)/10:Math.round(pct);
+}
+function tgMean(c,a,sid){            // Aufgaben mit Noten: gewichteter Mittelwert der Teilnoten
+  const g=a.tg?.[sid];if(!g||!isNum(c))return null;let s=0,w=0;
+  for(const t of a.tasks){const v=g[t.id];if(typeof v!=='number')continue;const k=wOf(a,t);s+=num(c,v)*k;w+=k;}
+  return w?s/w:null;
+}
+function keyInfo(c,a){
+  if(memo.has(a.id))return memo.get(a.id);
+  const L=levels(c),n=L.length,D=DEFKEY[n],k=a.key;const s=Math.max(0,L.findIndex(l=>above(c,l.v)));
+  const rd=x=>k.roundPct===false?Math.round(x*10)/10:Math.round(x);let info;
+  if(k.mode==='manual'&&Array.isArray(k.manual)&&k.manual.length===n)info={L,s,th:k.manual.map(Number),manual:true};
+  else{
+    const Dp=D[s],Dt=D[n-1],P=s===0?0:(k.pass??Dp);let T=k.top??Dt,Pe=P,lowered=false;
+    if(k.minAbove>0&&s>0){
+      const ps=c.students.filter(st=>G(c,a)[st.id]!=='nb').map(st=>taskPct(a,st.id)).filter(x=>x!=null).sort((x,y)=>y-x);
+      if(ps.length){const need=ps[Math.min(k.minAbove,ps.length)-1];if(need<Pe){Pe=need;lowered=true;}}
+    }
+    if(T<Pe)T=Pe;
+    const th=D.map((d,i)=>i===0?0:i===s?Pe:i<s?rd(d*Pe/Dp):rd(Dt>Dp?Pe+(d-Dp)*(T-Pe)/(Dt-Dp):T));
+    for(let i=1;i<n;i++)if(th[i]<th[i-1])th[i]=th[i-1];
+    info={L,s,th,P,Pe,T,lowered};
+  }
+  memo.set(a.id,info);return info;
+}
+function value(c,a,sid){
+  const g=G(c,a)[sid];if(g==='nb')return'nb';
+  if(a.mode==='tasks'){const p=taskPct(a,sid);if(p==null)return null;const k=keyInfo(c,a);let i=0;k.th.forEach((t,j)=>{if(p>=t)i=j;});return k.L[i].v;}
+  if(a.mode==='tgrades')return roundLevel(c,tgMean(c,a,sid));
+  return validV(c,g)?g:null;
+}
+function taskQuote(c,a,t){           // Schnitt je Aufgabe
+  const st=c.students.filter(s=>G(c,a)[s.id]!=='nb');
+  if(a.mode==='tgrades'){const v=st.map(s=>a.tg?.[s.id]?.[t.id]).filter(x=>typeof x==='number');return{avg:isNum(c)?mean(v.map(x=>num(c,x))):null};}
+  const avg=mean(st.map(s=>a.points?.[s.id]?.[t.id]).filter(x=>x!=null));return{avg,pct:avg==null||!t.max?null:avg/t.max*100};
+}
+
+/* ============ Auswertung ============ */
+const graded=(c,a)=>c.students.map(s=>value(c,a,s.id)).filter(v=>v!=null&&v!=='nb');
+function aMean(c,a){if(!isNum(c))return null;return mean(graded(c,a).map(v=>num(c,v)));}
+function catMean(c,cat,sid){
+  if(!isNum(c))return null;let s=0,w=0;
+  for(const a of sortedA(c,cat)){const v=value(c,a,sid);if(v==null||v==='nb')continue;const g=+a.weight||1;s+=num(c,v)*g;w+=g;}
+  return w?s/w:null;
+}
+function total(c,sid){let s=0,w=0;for(const cat of c.categories){const m=catMean(c,cat,sid);if(m==null)continue;const g=+cat.weight||0;s+=m*g;w+=g;}return w?s/w:null;}
+function dist(c,vals){          // Notenspiegel
+  if(c.scale==='noten')return[1,2,3,4,5,6].map(n=>({l:String(n),n:vals.filter(v=>whole(v)===n).length,u:!above(c,[14,11,8,5,2,0][n-1])}));
+  return[...levels(c)].reverse().map(l=>({l:l.l,n:vals.filter(v=>v===l.v).length,u:!above(c,l.v)}));
+}
+const symCounts=(c,vals)=>SYM.slice().reverse().map(s=>`${s.l} ${vals.filter(v=>v===s.v).length}`).join(' · ');
+const symHtml=(c,vals)=>SYM.slice().reverse().map(s=>{const n=vals.filter(v=>v===s.v).length;return`<span class="${n?'':'mute'}" style="margin:0 5px">${s.l} <b>${n}</b></span>`;}).join('');
+function stats(c,vals){
+  const o={n:vals.length,over:vals.filter(v=>above(c,v)).length};o.under=o.n-o.over;
+  if(isNum(c)&&o.n){const x=vals.map(v=>num(c,v));o.mean=mean(x);o.median=median(x);const s=[...vals].sort((a,b)=>b-a);o.best=s[0];o.worst=s[s.length-1];}
+  return o;
+}
+const totals=c=>c.students.map(s=>{const t=total(c,s.id);return{s,t,lv:roundLevel(c,t)};});
+function allValues(c,sid){const out=[];for(const cat of c.categories)for(const a of sortedA(c,cat))out.push({cat,a,v:value(c,a,sid)});return out;}
+function nbStat(c,sid,cat){const A=(cat?[cat]:c.categories).flatMap(k=>sortedA(c,k)),n=A.filter(a=>value(c,a,sid)==='nb').length;return{n,of:A.length,pct:A.length?n/A.length*100:0,txt:`${n} von ${A.length}${A.length?` (${fm(n/A.length*100,0)} %)`:''}`};}
+const oralCat=c=>c.categories.find(k=>k.oral);
+const nAssess=c=>c.categories.reduce((s,k)=>s+sortedA(c,k).length,0);
+
+/* ============ Diagramme ============ */
+function barChart(b){
+  const bw=Math.max(26,Math.min(64,560/b.length)),W=b.length*bw+20,H=170,mx=Math.max(1,...b.map(x=>x.n));
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" style="max-width:${Math.round(W*1.5)}px" role="img" aria-label="Notenspiegel"><line class="ax" x1="10" x2="${W-10}" y1="${H-28}" y2="${H-28}"/>`;
+  b.forEach((x,i)=>{const h=x.n/mx*(H-58),X=10+i*bw;
+    s+=`<rect class="bar${x.u?' u':''}" x="${X+4}" y="${H-28-h}" width="${bw-8}" height="${h}" rx="5"><title>${esc(x.l)}: ${x.n}${x.u?' (unter dem Strich)':''}</title></rect>`+
+       `<text x="${X+bw/2}" y="${H-34-h}" text-anchor="middle">${x.n||''}</text><text class="tl" x="${X+bw/2}" y="${H-10}" text-anchor="middle">${esc(x.l)}</text>`;});
+  return s+'</svg>';
+}
+function lineChart(c,pts){     // pts: {label,y,y2,t}
+  if(pts.length<2)return'<div class="empty">Für einen Verlauf sind mindestens zwei Werte nötig.</div>';
+  const W=640,H=230,l=34,r=40,t=14,b=50,inv=c.scale==='noten',lo=inv?1:0,hi=inv?6:15;
+  const X=i=>l+i*(W-l-r)/(pts.length-1),Y=y=>{const f=(Math.max(lo,Math.min(hi,y))-lo)/(hi-lo);return inv?t+f*(H-t-b):H-b-f*(H-t-b);};
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" style="max-width:860px" role="img" aria-label="Verlauf">`;
+  for(const g of(inv?[1,2,3,4,5,6]:[0,5,10,15]))s+=`<line class="ax" x1="${l}" x2="${W-r}" y1="${Y(g)}" y2="${Y(g)}"/><text class="tl" x="${l-8}" y="${Y(g)+4}" text-anchor="end">${g}</text>`;
+  const path=k=>pts.map((p,i)=>p[k]==null?null:`${X(i)},${Y(p[k])}`).filter(Boolean).join(' ');
+  s+=`<polyline class="ln2" points="${path('y2')}"/><polyline class="ln" points="${path('y')}"/>`;
+  pts.forEach((p,i)=>{if(p.y==null)return;s+=`<circle class="dot" cx="${X(i)}" cy="${Y(p.y)}" r="4"><title>${esc(p.label)}: ${esc(p.t)}</title></circle>`;
+    if(pts.length<=12)s+=`<text class="tl" x="${X(i)}" y="${H-b+20}" text-anchor="middle">${esc(p.label.length>13?p.label.slice(0,12)+'…':p.label)}</text>`;});
+  return s+'</svg>';
+}
+
+/* ============ Berichtsabschnitte (Grundlage für Excel und PDF) ============ */
+function secOverview(c){
+  const out=[],P=pName(c);
+  if(isNum(c)){
+    const T=totals(c),rows=[['Name',...c.categories.map(k=>`${k.name} (${k.weight} %)`),'Gesamt Ø','Gesamtnote']];
+    T.forEach(o=>rows.push([o.s.name,...c.categories.map(k=>r2(catMean(c,k,o.s.id))),r2(o.t),xval(c,o.lv)]));
+    rows.push(['Kurs-Ø',...c.categories.map(k=>r2(mean(c.students.map(s=>catMean(c,k,s.id)).filter(x=>x!=null)))),r2(mean(T.map(o=>o.t).filter(x=>x!=null))),'']);
+    const lv=T.map(o=>o.lv).filter(v=>v!=null),st=stats(c,lv),d=dist(c,lv);
+    out.push({sheet:'Übersicht',title:`Gesamtübersicht ${P}`,kv:1,brk:1,rows:[['Schüler/innen',c.students.length],['Kurs-Ø',r2(st.mean)],['Median',r2(st.median)],['über dem Strich',st.over],['unter dem Strich',st.under]]});
+    out.push({sheet:'Übersicht',title:'Notenspiegel der Gesamtnoten',rows:[[c.scale==='noten'?'Note':'Punkte','Anzahl'],...d.map(x=>[x.l,x.n])],head:1,chart:barChart(d)});
+    out.push({sheet:'Übersicht',title:'Gesamtnoten',rows,head:1,foot:1});
+  }else{
+    const rows=[['Name',...c.categories.map(k=>k.name),'Gesamt']];
+    c.students.forEach(s=>{const all=allValues(c,s.id);rows.push([s.name,...c.categories.map(k=>symCounts(c,all.filter(x=>x.cat===k).map(x=>x.v))),symCounts(c,all.map(x=>x.v))]);});
+    const vals=c.students.flatMap(s=>allValues(c,s.id).map(x=>x.v)).filter(v=>v!=null&&v!=='nb'),d=dist(c,vals);
+    out.push({sheet:'Übersicht',title:`Gesamtübersicht ${P}`,brk:1,rows:[['Bewertung','Anzahl'],...d.map(x=>[x.l,x.n])],head:1,chart:barChart(d)});
+    out.push({sheet:'Übersicht',title:'Übersicht je Schüler/in',rows,head:1});
+  }
+  return out;
+}
+function secCategory(c,cat){
+  const A=sortedA(c,cat),rows=[['Name',...A.map(a=>`${a.name}${a.date?' '+fdate(a.date).slice(0,6):''}`),isNum(c)?'Ø':'Verteilung']];
+  c.students.forEach(s=>rows.push([s.name,...A.map(a=>xval(c,value(c,a,s.id))),isNum(c)?r2(catMean(c,cat,s.id)):symCounts(c,A.map(a=>value(c,a,s.id)))]));
+  if(isNum(c))rows.push(['Ø',...A.map(a=>r2(aMean(c,a))),'']);
+  return[{sheet:cat.name,title:`${cat.name}${isNum(c)?` – Anteil ${cat.weight} %`:''}`,rows,head:1,foot:isNum(c)?1:0,brk:1,page:1}];
+}
+function secAssessment(c,cat,a){
+  const sh=`${a.name} ${fdate(a.date)}`.trim(),vals=graded(c,a),st=stats(c,vals),d=dist(c,vals),nb=c.students.filter(s=>value(c,a,s.id)==='nb').length;
+  const kz=[['bewertet',st.n]];
+  if(isNum(c))kz.push(['Ø',r2(st.mean)],['Median',r2(st.median)],['beste',xval(c,st.best)],['schlechteste',xval(c,st.worst)]);
+  kz.push(['über dem Strich',st.over],['unter dem Strich',st.under],['nicht bewertet',nb]);
+  const out=[{sheet:sh,title:`${a.name}${a.date?' · '+fdate(a.date):''} · ${cat.name}`,rows:kz,kv:1,brk:1,page:1},{sheet:sh,title:'Notenspiegel',rows:[['Bewertung','Anzahl'],...d.map(x=>[x.l,x.n])],head:1,chart:barChart(d)}];
+  if(a.mode==='tasks'){
+    const k=keyInfo(c,a);
+    out.push({sheet:sh,title:'Aufgaben',head:1,rows:[['Aufgabe','Max. Punkte','Gewichtung %','Ø Punkte','Lösungsquote %'],...a.tasks.map(t=>{const q=taskQuote(c,a,t);return[t.name,t.max,Math.round(share(a,t)),r2(q.avg),q.pct==null?'':Math.round(q.pct)];})]});
+    const kr=k.L.map((l,i)=>[l.l,k.th[i],vals.filter(v=>v===l.v).length]).reverse();out.push({sheet:sh,title:'Notenschlüssel',tight:1,side:1,rows:['Bewertung','ab %','Anzahl'].map((n,j)=>[n,...kr.map(r=>r[j])])});
+    out.push({sheet:sh,title:'Ergebnisse',head:1,rows:[['Name',...a.tasks.map(t=>`${t.name} (${t.max})`),'Prozent','Bewertung'],...c.students.map(s=>[s.name,...a.tasks.map(t=>a.points?.[s.id]?.[t.id]??''),taskPct(a,s.id)??'',xval(c,value(c,a,s.id))])]});
+  }else if(a.mode==='tgrades'){
+    out.push({sheet:sh,title:'Aufgaben',head:1,rows:[['Aufgabe','Gewichtung %','Ø'],...a.tasks.map(t=>[t.name,Math.round(share(a,t)),r2(taskQuote(c,a,t).avg)])]});
+    out.push({sheet:sh,title:'Ergebnisse',head:1,rows:[['Name',...a.tasks.map(t=>`${t.name} (${Math.round(share(a,t))} %)`),'Ø','Bewertung'],...c.students.map(s=>[s.name,...a.tasks.map(t=>xval(c,a.tg?.[s.id]?.[t.id])),r2(tgMean(c,a,s.id)),xval(c,value(c,a,s.id))])]});
+  }else out.push({sheet:sh,title:'Ergebnisse',head:1,rows:[['Name','Bewertung'],...c.students.map(s=>[s.name,xval(c,value(c,a,s.id))])]});
+  return out;
+}
+const nbRows=(c,s)=>[[`${oralCat(c).name}: nicht bewertet`,nbStat(c,s.id,oralCat(c)).txt],['Gesamt: nicht bewertet',nbStat(c,s.id).txt]];
+function secStudent(c,s,sheet){
+  const sh=sheet||s.name,all=allValues(c,s.id),out=[];
+  if(isNum(c)){
+    const T=totals(c),me=T.find(o=>o.s.id===s.id),rk=me.t==null?'':1+T.filter(o=>o.t!=null&&better(c,o.t,me.t)).length;
+    out.push({sheet:sh,title:s.name,kv:1,brk:1,keep:1,rows:[['Gesamtnote',xval(c,me.lv)],['Gesamt Ø',r2(me.t)],['Rang',rk===''?'':`${rk} von ${T.filter(o=>o.t!=null).length}`],...c.categories.map(k=>[`Ø ${k.name}`,r2(catMean(c,k,s.id))]),...nbRows(c,s)]});
+    out.push({sheet:sh,title:'Einzelbewertungen',head:1,rows:[['Kategorie','Bewertung','Datum','Note','Kurs-Ø'],...all.map(x=>[x.cat.name,x.a.name,fdate(x.a.date),xval(c,x.v),r2(aMean(c,x.a))])]});
+  }else{
+    out.push({sheet:sh,title:s.name,brk:1,keep:1,rows:[['Gesamt',symCounts(c,all.map(x=>x.v))],...c.categories.map(k=>[k.name,symCounts(c,all.filter(x=>x.cat===k).map(x=>x.v))]),...nbRows(c,s)]});
+    out.push({sheet:sh,title:'Einzelbewertungen',head:1,rows:[['Kategorie','Bewertung','Datum','Bewertung'],...all.map(x=>[x.cat.name,x.a.name,fdate(x.a.date),xval(c,x.v)])]});
+  }
+  return out;
+}
+function trendData(c){           // je Zeitraum eine eigenständige Wertung
+  return c.periods.map(p=>inPeriod(c,p.id,()=>{
+    if(!isNum(c))return{p,rows:c.students.map(s=>({s,all:allValues(c,s.id).map(x=>x.v)}))};
+    const T=totals(c);return{p,T,mean:mean(T.map(o=>o.t).filter(x=>x!=null))};}));
+}
+function secTrend(c){
+  const D=trendData(c),rows=[['Name',...c.periods.map(p=>p.name)]];
+  c.students.forEach((s,i)=>rows.push([s.name,...D.map(d=>isNum(c)?xval(c,d.T[i].lv):symCounts(c,d.rows[i].all))]));
+  if(isNum(c))rows.push(['Kurs-Ø',...D.map(d=>r2(d.mean))]);
+  return[{sheet:'Verlauf',title:'Verlauf über die Zeiträume',rows,head:1,foot:isNum(c)?1:0,brk:1,page:1}];
+}
+function sections(c,scope){
+  memo.clear();
+  if(scope==='all')return[...secOverview(c),...c.categories.flatMap(k=>secCategory(c,k)),...c.categories.flatMap(k=>sortedA(c,k).flatMap(a=>secAssessment(c,k,a))),
+    ...c.students.flatMap((s,i)=>{const x=secStudent(c,s,'Schüler');if(!i)x[0].page=1;return x;}),...(c.periods.length>1?secTrend(c):[])];
+  const d=ui.detail;
+  if(d?.type==='assessment'){const{cat,a}=findA(c,d.aid);return secAssessment(c,cat,a);}
+  if(d?.type==='student')return secStudent(c,c.students.find(s=>s.id===d.sid));
+  if(ui.tab==='grades')return c.categories.flatMap(k=>secCategory(c,k));
+  if(ui.tab==='trend')return secTrend(c);
+  return secOverview(c);
+}
+
+/* ============ Export: Excel (xlsx ohne Fremdbibliothek), PDF (Druckdialog), JSON ============ */
+function download(name,blob){
+  try{const f=new File([blob],name,{type:blob.type||'application/octet-stream'});
+    if(matchMedia('(pointer:coarse)').matches&&navigator.canShare?.({files:[f]})){navigator.share({files:[f]}).catch(e=>{if(e.name!=='AbortError')saveAs(name,blob);});return;}}catch(e){}
+  saveAs(name,blob);
+}
+function saveAs(name,blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);}
+const fname=s=>s.replace(/[\\/:*?"<>|]+/g,'_').trim()||'Export';
+function exportXlsx(scope){
+  const c=course(),secs=sections(c,scope),sheets=[];
+  for(const s of secs){let sh=sheets.find(x=>x.key===s.sheet);if(!sh){sh={key:s.sheet,rows:[],bold:new Set()};sheets.push(sh);}
+    if(sh.rows.length)sh.rows.push([]);sh.bold.add(sh.rows.length);sh.rows.push([s.title]);
+    for(let i=0;i<(s.head||0);i++)sh.bold.add(sh.rows.length+i);sh.rows.push(...s.rows);}
+  const used=new Set();
+  sheets.forEach(sh=>{let n=sh.key.replace(/[\[\]:*?\/\\]/g,' ').slice(0,31).trim()||'Blatt',b=n,i=2;while(used.has(n.toLowerCase()))n=b.slice(0,28)+' '+i++;used.add(n.toLowerCase());sh.name=n;});
+  download(fname(`${c.name} ${pName(c)} – ${scope==='all'?'Gesamtexport':secs[0].sheet}`)+'.xlsx',new Blob([buildXlsx(sheets)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+}
+function buildXlsx(sheets){
+  const col=i=>{let s='';for(i++;i>0;i=Math.floor((i-1)/26))s=String.fromCharCode(65+(i-1)%26)+s;return s;};
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n',ns='http://schemas.openxmlformats.org/spreadsheetml/2006/main',rn='http://schemas.openxmlformats.org/officeDocument/2006/relationships',pr='http://schemas.openxmlformats.org/package/2006/relationships';
+  const files=[['[Content_Types].xml',X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`],
+    ['_rels/.rels',X+`<Relationships xmlns="${pr}"><Relationship Id="rId1" Type="${rn}/officeDocument" Target="xl/workbook.xml"/></Relationships>`],
+    ['xl/workbook.xml',X+`<workbook xmlns="${ns}" xmlns:r="${rn}"><sheets>${sheets.map((s,i)=>`<sheet name="${esc(s.name)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets></workbook>`],
+    ['xl/_rels/workbook.xml.rels',X+`<Relationships xmlns="${pr}">${sheets.map((_,i)=>`<Relationship Id="rId${i+1}" Type="${rn}/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="${rn}/styles" Target="styles.xml"/></Relationships>`],
+    ['xl/styles.xml',X+`<styleSheet xmlns="${ns}"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs></styleSheet>`]];
+  sheets.forEach((sh,si)=>{
+    const w=[];let d='';
+    sh.rows.forEach((row,ri)=>{d+=`<row r="${ri+1}">`;row.forEach((v,ci)=>{if(v===''||v==null)return;const st=sh.bold.has(ri)?' s="1"':'',ref=col(ci)+(ri+1);
+      if(row.length>1||!sh.bold.has(ri))w[ci]=Math.max(w[ci]||8,String(v).length+2);
+      d+=typeof v==='number'&&isFinite(v)?`<c r="${ref}"${st}><v>${v}</v></c>`:`<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${esc(v)}</t></is></c>`;});d+='</row>';});
+    let cols='';for(let i=0;i<w.length;i++)cols+=`<col min="${i+1}" max="${i+1}" width="${Math.min(45,w[i]||10)}" customWidth="1"/>`;
+    files.push([`xl/worksheets/sheet${si+1}.xml`,X+`<worksheet xmlns="${ns}">${cols?`<cols>${cols}</cols>`:''}<sheetData>${d}</sheetData></worksheet>`]);
+  });
+  return zip(files);
+}
+function zip(files){       // ZIP ohne Kompression
+  const T=zip.T||(zip.T=Array.from({length:256},(_,n)=>{for(let k=0;k<8;k++)n=n&1?0xEDB88320^(n>>>1):n>>>1;return n>>>0;}));
+  const crc=b=>{let c=~0;for(const x of b)c=T[(c^x)&255]^(c>>>8);return~c>>>0;},enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  const hdr=(sig,n,extra)=>{const v=new DataView(new ArrayBuffer(n));v.setUint32(0,sig,true);extra(v);return new Uint8Array(v.buffer);};
+  for(const[name,text]of files){const nb=enc.encode(name),data=enc.encode(text),c=crc(data);
+    const common=(v,o)=>{v.setUint16(o,20,true);v.setUint16(o+2,0x0800,true);v.setUint16(o+4,0,true);v.setUint16(o+6,0,true);v.setUint16(o+8,0x21,true);v.setUint32(o+10,c,true);v.setUint32(o+14,data.length,true);v.setUint32(o+18,data.length,true);v.setUint16(o+22,nb.length,true);};
+    parts.push(hdr(0x04034b50,30,v=>common(v,4)),nb,data);
+    cen.push(hdr(0x02014b50,46,v=>{v.setUint16(4,20,true);common(v,6);v.setUint32(42,off,true);}),nb);off+=30+nb.length+data.length;}
+  const cs=cen.reduce((s,x)=>s+x.length,0);
+  return new Blob([...parts,...cen,hdr(0x06054b50,22,v=>{v.setUint16(8,files.length,true);v.setUint16(10,files.length,true);v.setUint32(12,cs,true);v.setUint32(16,off,true);})]);
+}
+function printHtml(c,secs){
+  const cell=v=>esc(typeof v==='number'?de(v):v);
+  const tbl=s=>{const h=s.head||0,n=s.rows.length,dec=[];if(!s.side)s.rows.forEach(r=>r.forEach((v,j)=>{if(typeof v==="number")dec[j]=Math.max(dec[j]||0,Math.min(2,(String(v).split(".")[1]||"").length));}));
+    const cell=(v,j)=>typeof v==="number"?fm(v,dec[j]||0):esc(v);return`<table class="${s.tight?"tight":""} ${s.side?"side":""}">${h?`<thead>${s.rows.slice(0,h).map(r=>`<tr>${r.map(v=>`<th>${cell(v)}</th>`).join('')}</tr>`).join('')}</thead>`:''}<tbody>${s.rows.slice(h).map((r,i)=>`<tr class="${s.foot&&i===n-h-1?'foot':''}">${r.map((v,j)=>`<td>${cell(v,j)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;};
+  const body=s=>s.kv?`<div class="kv" style="grid-template-columns:repeat(${s.rows.length<=5?s.rows.length:Math.ceil(s.rows.length/2)},1fr)">${s.rows.map(r=>`<div><b>${cell(r[1]===''?'–':r[1])}</b><span>${cell(r[0])}</span></div>`).join('')}</div>`:s.chart?`<div class="duo">${s.chart}${tbl(s)}</div>`:tbl(s);
+  let h=`<div class="ph"><div><h1>${esc(c.name)}</h1><div class="meta">${esc(pName(c))} · ${SCALES[c.scale]} · Stand ${fdate(today())}</div></div><div class="brand">Summa cum Laura</div></div>`,open=false;
+  secs.forEach((s,i)=>{
+    if(s.brk||!open){if(open)h+='</article>';let wide=false;for(let j=i;j<secs.length&&(j===i||!secs[j].brk);j++)if(!secs[j].tight&&(secs[j].rows[0]?.length||0)>11)wide=true;
+      h+=`<article class="${s.page&&i?'page ':''}${s.keep?'keep ':''}${wide?'wide':''}"><h2>${esc(s.title)}</h2>`;open=true;}
+    h+=`<section class="${s.rows.length>28?'long':''}">${s.brk||!i?'':`<h3>${esc(s.title)}</h3>`}${body(s)}</section>`;});
+  return h+'</article>';
+}
+function exportPdf(scope){const c=course();$('#print').innerHTML=printHtml(c,sections(c,scope));toast('Im Druckdialog als Ziel „Als PDF speichern“ wählen.');setTimeout(()=>window.print(),150);}
+function exportJson(){db.lastBackup=new Date().toISOString();save();download(`Summa-cum-Laura-Sicherung-${today()}.json`,new Blob([JSON.stringify(db,null,1)],{type:'application/json'}));render();}
+$('#file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const j=JSON.parse(rd.result);if(!j||!Array.isArray(j.courses))throw 0;
+  if(db.courses.length&&!confirm(`Die Sicherung enthält ${j.courses.length} Kurs(e). Der aktuelle Datenbestand im Browser wird dadurch vollständig ersetzt. Fortfahren?`))return;
+  db=migrate(j);ui.detail=null;ui.tab='overview';save();render();toast('Datenbestand geladen.');}catch(x){alert('Die Datei ist keine gültige Sicherung dieses Tools.');}};rd.readAsText(f);e.target.value='';});
+
+/* ============ CSV-Import von Schülernamen ============ */
+let csv=null;
+function parseCsv(t){
+  t=t.replace(/^\uFEFF/,'');const head=t.split(/\r?\n/).slice(0,5).join('\n'),d=[';','\t',','].map(x=>[x,head.split(x).length-1]).sort((a,b)=>b[1]-a[1])[0],del=d[1]?d[0]:';';
+  const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<t.length;i++){const ch=t[i];
+    if(q){if(ch==='"'){if(t[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=ch;}
+    else if(ch==='"'&&cur==='')q=true;
+    else if(ch===del){row.push(cur);cur='';}
+    else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;row.push(cur);cur='';rows.push(row);row=[];}
+    else cur+=ch;}
+  row.push(cur);rows.push(row);
+  return rows.map(r=>r.map(x=>x.trim())).filter(r=>r.some(x=>x));
+}
+function csvDialog(rows){
+  if(!rows.length)return toast('Die Datei enthält keine Daten.');
+  csv={rows};const n=Math.max(...rows.map(r=>r.length)),hd=rows[0],fi=re=>hd.findIndex(x=>re.test(x));
+  const isH=hd.every(x=>!/\d/.test(x))&&hd.some(x=>/name|sch(ü|ue)ler|first|last/i.test(x));
+  let a=isH?fi(/nachname|familienname|last|surname/i):-1,b=isH?fi(/vorname|rufname|first|given/i):-1;
+  if(a<0)a=isH?Math.max(0,hd.findIndex((x,i)=>i!==b&&/name|sch(ü|ue)ler/i.test(x))):0;
+  if(b<0&&!isH&&n>1)b=1;if(b===a)b=-1;
+  const opts=(sel,none)=>(none?'<option value="-1">– keine –</option>':'')+Array.from({length:n},(_,i)=>`<option value="${i}" ${i===sel?'selected':''}>Spalte ${i+1}${hd[i]?' · '+esc(hd[i].slice(0,24)):''}</option>`).join('');
+  const d=$('#dlg');d.innerHTML=`<form method="dialog"><h2 style="margin-bottom:16px">Namen aus CSV importieren</h2>
+    <p><label><input type="checkbox" id="cvH" ${isH?'checked':''} onchange="csvPreview()"> Erste Zeile ist eine Überschrift</label></p>
+    <div class="row"><label class="f">Nachname oder ganzer Name<select id="cvA" onchange="csvPreview()">${opts(a)}</select></label>
+      <label class="f">Vorname<select id="cvB" onchange="csvPreview()">${opts(b,1)}</select></label>
+      <label class="f">Schreibweise<select id="cvF" onchange="csvPreview()"><option value="nv">Nachname, Vorname</option><option value="vn">Vorname Nachname</option></select></label></div>
+    <div id="cvP" class="tile" style="margin:16px 0;background:var(--soft);box-shadow:none"></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn" value="cancel" formnovalidate>Abbrechen</button><button class="btn pri" value="ok">Importieren</button></div></form>`;
+  d.onclose=()=>{if(d.returnValue!=='ok')return;const c=course(),have=new Set(c.students.map(s=>s.name.toLowerCase())),N=csv.names;let add=0;
+    for(const x of N)if(!have.has(x.toLowerCase())){have.add(x.toLowerCase());c.students.push({id:uid(),name:x});add++;}
+    done(1);toast(`${add} Namen importiert${N.length-add?`, ${N.length-add} bereits vorhanden oder doppelt`:''}.`);};
+  d.showModal();csvPreview();
+}
+function csvPreview(){
+  const H=$('#cvH').checked,a=+$('#cvA').value,b=+$('#cvB').value,f=$('#cvF').value;
+  const N=csv.names=csv.rows.slice(H?1:0).map(r=>{const x=r[a]||'',y=b>=0?(r[b]||''):'';return y&&x?(f==='vn'?`${y} ${x}`:`${x}, ${y}`):(x||y);}).filter(Boolean);
+  $('#cvP').innerHTML=`<span>${N.length} Namen erkannt – Vorschau</span><div style="margin-top:6px">${N.slice(0,6).map(esc).join('<br>')}${N.length>6?'<br>…':''}</div>`;
+}
+$('#csv').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{let t;
+  try{t=new TextDecoder('utf-8',{fatal:true}).decode(rd.result);}catch(x){t=new TextDecoder('windows-1252').decode(rd.result);}   // Excel-CSV ist oft nicht UTF-8
+  csvDialog(parseCsv(t));};rd.readAsArrayBuffer(f);e.target.value='';});
+
+/* ============ Ansichten ============ */
+const app=$('#app');
+function lv(tag,f,...a){return`<${tag} data-live="${esc([f,...a].join('|'))}">${LIVE[f](...a)}</${tag}>`;}
+function refreshLive(){memo.clear();if(!course())return;document.querySelectorAll('[data-live]').forEach(el=>{const[f,...a]=el.dataset.live.split('|');el.innerHTML=LIVE[f](...a);});}
+const pills=(act,cur,opts,extra='',cls='')=>`<span class="pills ${cls}">${opts.map(([v,l])=>`<button data-act="${act}" data-v="${v}" ${extra} class="${v===cur?'on':''}">${l}</button>`).join('')}</span>`;
+const tile=(v,l,cls='',tt='')=>`<div class="tile ${cls}" ${tt?`title="${esc(tt)}"`:''}><b>${v}</b><span>${l}</span></div>`;
+const tip=t=>`<span class="tip" tabindex="0" data-tip="${esc(t)}">i</span>`;
+const gbadge=(c,v)=>v==null?'<span class="mute">–</span>':v==='nb'?'<span class="mute">n. b.</span>':`<span class="badge${above(c,v)?'':' u'}">${esc(fmt(c,v))}</span>`;
+const sLink=s=>`<button class="link" data-act="openS" data-s="${s.id}">${esc(s.name)}</button>${s.note?.trim()?`<span class="note" title="${esc(s.note.trim().slice(0,200))}">✎</span>`:''}`;
+const aLink=(a,inner)=>`<button class="link" data-act="openA" data-a="${a.id}">${inner??esc(a.name)}</button>`;
+const cellIn=(ch,c,a,s,val,extra='')=>`<input class="cell" data-ch="${ch}" data-a="${a.id}" data-s="${s.id}" ${extra} value="${esc(val)}" aria-label="${esc(s.name)}">`;
+
+function render(){
+  memo.clear();const c=course();
+  const bk=db.lastBackup?`Letzte Sicherung: ${fdate(db.lastBackup.slice(0,10))}`:'Noch keine Sicherung erstellt';
+  let h=`<header class="top"><div class="logo"></div><h1>Summa cum Laura</h1>`;
+  if(c)h+=`<select data-ch="course" aria-label="Kurs wählen">${db.courses.map(k=>`<option value="${k.id}" ${k.id===db.active?'selected':''}>${esc(k.name)}</option>`).join('')}</select>
+    <select data-ch="period" aria-label="Zeitraum wählen" title="Zeitraum – jeder Zeitraum wird eigenständig gewertet">${c.periods.map(p=>`<option value="${p.id}" ${p.id===c.period?'selected':''}>${esc(p.name)}</option>`).join('')}</select>`;
+  h+=`<button class="btn ghost" data-act="newCourse">+ Kurs</button><span class="grow"></span>
+    ${c?`<details class="menu"><summary class="btn">Export</summary><div class="pop"><small>Diese Ansicht</small><button data-act="xlsx" data-v="view">Excel</button><button data-act="pdf" data-v="view">PDF</button><small>Ganzer Kurs · ${esc(pName(c))}</small><button data-act="xlsx" data-v="all">Excel</button><button data-act="pdf" data-v="all">PDF</button></div></details>`:''}
+    <details class="menu"><summary class="btn">Daten</summary><div class="pop"><small>${bk}</small><button data-act="backup">Datenbestand sichern</button><button data-act="restore">Sicherung laden</button></div></details></header><main>`;
+  if(!c)h+=`<div class="card" style="max-width:560px;margin:60px auto;text-align:center;padding:36px"><div class="logo" style="margin:0 auto 14px;width:44px;height:44px;border-radius:14px"></div><h2>Willkommen</h2><p class="mute">Lege einen Kurs oder eine Klasse an, um zu starten.</p>
+    <div class="row" style="justify-content:center;margin-top:18px"><button class="btn pri" data-act="newCourse">Kurs anlegen</button><button class="btn" data-act="demo">Beispielkurs laden</button></div></div>`;
+  else{
+    const d=ui.detail;
+    if(!d)h+=`<div class="bar-row">${pills('tab',ui.tab,[['overview','Übersicht'],['grades','Noten'],['trend','Verlauf'],['settings','Einstellungen']])}</div>`;
+    h+=d?.type==='assessment'?viewAssessment(c,d.aid):d?.type==='student'?viewStudent(c,d.sid):ui.tab==='grades'?viewGrades(c):ui.tab==='trend'?viewTrend(c):ui.tab==='settings'?viewSettings(c):viewOverview(c);
+  }
+  app.innerHTML=h+'</main>';
+}
+
+function viewOverview(c){
+  if(!c.students.length)return`<div class="card empty">Dieser Kurs hat noch keine Schüler/innen.<br><br><button class="btn pri" data-act="goSet" data-v="students">Schüler/innen anlegen</button></div>`;
+  const tog=pills('ovd',ui.ovd?'1':'0',[['0','Kompakt'],['1','Kategorien']],'','sm');
+  if(isNum(c)){
+    const T=totals(c),lvs=T.map(o=>o.lv).filter(v=>v!=null),st=stats(c,lvs);
+    return`<div class="tiles">${tile(c.students.length,'Schüler/innen')}${tile(fm(st.mean),'Kurs-Ø','b',`Median ${fm(st.median)}`)}${tile(st.over,'über dem Strich','g')}${tile(st.under,'unter dem Strich')}</div>
+    <div class="cols"><div class="card"><div class="ch"><h3>Notenspiegel</h3>${tip(`Verteilung der Gesamtnoten im Zeitraum „${pName(c)}“. Farbig abgesetzt: unter dem Strich (schlechter als ${fmt(c,c.strich[c.scale])}).`)}</div>${lvs.length?barChart(dist(c,lvs)):'<div class="empty">Noch keine Bewertungen in diesem Zeitraum.</div>'}</div>
+    <div class="card"><div class="ch"><h3>Gesamtnoten</h3>${tip(`Je Kategorie wird der Mittelwert aller Bewertungen gebildet; die Kategorien fließen mit ihrem Anteil in die Gesamtnote ein.${c.scale==='noten'?' Tendenzen zählen als Drittelnoten (2+ = 1,67 · 2− = 2,33).':''} Die Gesamtnote ist ein rechnerischer Vorschlag. Klick auf einen Namen öffnet die Schülerübersicht.`)}<span class="grow"></span>${tog}</div>
+      <div class="scroll"><table><tr><th>Name</th>${ui.ovd?c.categories.map(k=>`<th>${esc(k.name)}<small>${k.weight} %</small></th>`).join(''):''}<th>Ø</th><th>Note</th></tr>
+      ${T.map(o=>`<tr><td>${sLink(o.s)}</td>${ui.ovd?c.categories.map(k=>`<td>${fm(catMean(c,k,o.s.id))}</td>`).join(''):''}<td>${fm(o.t)}</td><td>${gbadge(c,o.lv)}</td></tr>`).join('')}
+      ${ui.ovd?`<tfoot><tr><td>Kurs-Ø</td>${c.categories.map(k=>`<td>${fm(mean(c.students.map(s=>catMean(c,k,s.id)).filter(x=>x!=null)))}</td>`).join('')}<td>${fm(st.mean)}</td><td></td></tr></tfoot>`:''}</table></div></div></div>`;
+  }
+  const vals=c.students.flatMap(s=>allValues(c,s.id).map(x=>x.v)).filter(v=>v!=null&&v!=='nb');
+  return`<div class="tiles">${tile(c.students.length,'Schüler/innen')}${tile(nAssess(c),'Bewertungen','b')}${tile(vals.length,'vergebene Symbole','g')}</div>
+    <div class="cols"><div class="card"><div class="ch"><h3>Verteilung</h3>${tip('Bei der Symbol-Skala werden nur Häufigkeiten gezählt – keine Mittelwerte und keine Gesamtnote.')}</div>${vals.length?barChart(dist(c,vals)):'<div class="empty">Noch keine Bewertungen in diesem Zeitraum.</div>'}</div>
+    <div class="card"><div class="ch"><h3>Je Schüler/in</h3><span class="grow"></span>${tog}</div><div class="scroll"><table><tr><th>Name</th>${ui.ovd?c.categories.map(k=>`<th>${esc(k.name)}</th>`).join(''):''}<th>Gesamt</th></tr>
+      ${c.students.map(s=>{const all=allValues(c,s.id);return`<tr><td>${sLink(s)}</td>${ui.ovd?c.categories.map(k=>`<td>${symHtml(c,all.filter(x=>x.cat===k).map(x=>x.v))}</td>`).join(''):''}<td>${symHtml(c,all.map(x=>x.v))}</td></tr>`;}).join('')}</table></div></div></div>`;
+}
+function viewGrades(c){
+  if(!c.categories.length)return`<div class="card empty">Keine Kategorien vorhanden.<br><br><button class="btn pri" data-act="goSet" data-v="cats">Kategorien anlegen</button></div>`;
+  const cat=c.categories.find(k=>k.id===ui.cat)||c.categories[0],A=sortedA(c,cat);ui.cat=cat.id;
+  return`<div class="bar-row">${pills('cat',cat.id,c.categories.map(k=>[k.id,`${esc(k.name)}${isNum(c)?`<small>${k.weight} %</small>`:''}`]),'','sm')}
+    ${tip(`Eingabe: ${hint(c)} · „nb“ = nicht bewertet. Enter und Pfeiltasten springen zur nächsten Zeile. Ein Klick auf eine Bewertung öffnet deren Statistik, ein Klick auf einen Namen die Schülerübersicht.`)}<span class="grow"></span><button class="btn pri" data-act="addA" data-c="${cat.id}">+ Bewertung</button></div>
+    <div class="card">${A.length?`<div class="scroll"><table><tr><th>Name</th>${A.map(a=>`<th>${aLink(a)}<small>${fdate(a.date).slice(0,6)}</small></th>`).join('')}<th>${isNum(c)?'Ø':'Verteilung'}</th>${cat.oral?'<th title="Wie oft nicht bewertet – Anzahl von allen Bewertungen dieser Kategorie">n. b.</th>':''}</tr>
+      ${c.students.map(s=>`<tr><td>${sLink(s)}</td>${A.map(a=>`<td>${a.mode!=='direct'?aLink(a,gbadge(c,value(c,a,s.id))):cellIn('grade',c,a,s,fmt(c,value(c,a,s.id)))}</td>`).join('')}${lv('td','catmean',cat.id,s.id)}${cat.oral?lv('td','nbc',cat.id,s.id):''}</tr>`).join('')}
+      ${isNum(c)?`<tfoot><tr><td>Ø</td>${A.map(a=>lv('td','amean',a.id)).join('')}<td></td>${cat.oral?'<td></td>':''}</tr></tfoot>`:''}</table></div>`
+      :`<div class="empty">Noch keine Bewertung in „${esc(cat.name)}“ im Zeitraum „${esc(pName(c))}“.</div>`}</div>`;
+}
+function viewTrend(c){
+  if(c.periods.length<2)return`<div class="card empty">Für einen Verlauf werden mindestens zwei Zeiträume benötigt (z. B. 1. und 2. Halbjahr).<br><br><button class="btn pri" data-act="goSet" data-v="periods">Zeitraum anlegen</button></div>`;
+  const D=trendData(c),info=tip('Jeder Zeitraum ist eine eigenständige Wertung – die Noten eines Zeitraums wirken sich nicht auf einen anderen aus.');
+  if(!isNum(c))return`<div class="card"><div class="ch"><h3>Verlauf über die Zeiträume</h3>${info}</div><div class="scroll"><table><tr><th>Name</th>${c.periods.map(p=>`<th>${esc(p.name)}</th>`).join('')}</tr>
+    ${c.students.map((s,i)=>`<tr><td>${sLink(s)}</td>${D.map(d=>`<td>${symHtml(c,d.rows[i].all)}</td>`).join('')}</tr>`).join('')}</table></div></div>`;
+  const arrow=(a,b)=>a==null||b==null?'':Math.abs(a-b)<0.05?'<span class="mute">→</span>':better(c,b,a)?'<b style="color:var(--green-d)">↗</b>':'<b style="color:var(--coral)">↘</b>';
+  return`<div class="cols"><div class="card"><div class="ch"><h3>Kurs-Ø je Zeitraum</h3>${info}</div>${lineChart(c,D.map(d=>({label:d.p.name,y:d.mean,t:fm(d.mean)})))}</div>
+    <div class="card"><div class="ch"><h3>Gesamtnoten je Zeitraum</h3></div><div class="scroll"><table><tr><th>Name</th>${c.periods.map(p=>`<th>${esc(p.name)}</th>`).join('')}<th></th></tr>
+    ${c.students.map((s,i)=>{const t=D.map(d=>d.T[i].t).filter(x=>x!=null);return`<tr><td>${sLink(s)}</td>${D.map(d=>`<td title="Ø ${fm(d.T[i].t)}">${gbadge(c,d.T[i].lv)}</td>`).join('')}<td>${t.length>1?arrow(t[t.length-2],t[t.length-1]):''}</td></tr>`;}).join('')}
+    <tfoot><tr><td>Kurs-Ø</td>${D.map(d=>`<td>${fm(d.mean)}</td>`).join('')}<td></td></tr></tfoot></table></div></div></div>`;
+}
+function viewAssessment(c,aid){
+  const{cat,a}=findA(c,aid);if(!a){ui.detail=null;return viewGrades(c);}
+  const tm=a.mode!=='direct',subs=[['stats','Statistik'],['input','Eingabe'],...(tm?[['tasks','Aufgaben & Gewichtung']]:[]),...(a.mode==='tasks'?[['key','Notenschlüssel']]:[]),['cfg','Einstellungen']];
+  if(!subs.some(s=>s[0]===ui.sub))ui.sub='stats';
+  let h=`<p><button class="link" data-act="back">← ${esc(cat.name)}</button></p><div class="bar-row"><h2>${lv('span','aname',a.id)}</h2><span class="mute">${fdate(a.date)}</span><span class="grow"></span>${pills('sub',ui.sub,subs)}</div>`;
+  const noSym=a.mode==='tgrades'&&!isNum(c)?'<div class="card empty">„Aufgaben mit Noten“ steht bei der Symbol-Skala nicht zur Verfügung, weil dort keine Mittelwerte gebildet werden.</div>':'';
+  if(ui.sub==='stats')h+=noSym||lv('div','astats',a.id);
+  else if(ui.sub==='input'){
+    const nbBox=s=>`<td><input type="checkbox" data-ch="nb" data-a="${a.id}" data-s="${s.id}" ${G(c,a)[s.id]==='nb'?'checked':''} aria-label="${esc(s.name)} nicht bewertet"></td>`;
+    if(noSym)h+=noSym;
+    else if(!tm)h+=`<div class="card"><div class="ch"><h3>Bewertungen</h3>${tip(`Eingabe: ${hint(c)} · „nb“ = nicht bewertet`)}</div><table><tr><th>Name</th><th>Bewertung</th></tr>${c.students.map(s=>`<tr><td>${sLink(s)}</td><td>${cellIn('grade',c,a,s,fmt(c,value(c,a,s.id)))}</td></tr>`).join('')}</table></div>`;
+    else if(!a.tasks.length)h+=`<div class="card empty">Lege zuerst Aufgaben an.<br><br><button class="btn pri" data-act="sub" data-v="tasks">Aufgaben anlegen</button></div>`;
+    else{const pm=a.mode==='tasks';
+      h+=`<div class="card"><div class="ch"><h3>${pm?'Punkte':'Noten'} je Aufgabe</h3>${tip(pm?'Erreichte Punkte je Aufgabe eintragen. Leere Felder zählen als 0 Punkte, sobald mindestens eine Aufgabe eingetragen ist.':`Teilnote je Aufgabe eintragen (${hint(c)}). Leere Felder bleiben bei der Berechnung außen vor.`)}</div>
+      <div class="scroll"><table><tr><th>Name</th>${a.tasks.map(t=>lv('th','thead',a.id,t.id)).join('')}<th>${pm?'Prozent':'Ø'}</th><th>Bewertung</th><th title="nicht bewertet">n. b.</th></tr>
+      ${c.students.map(s=>{const nb=G(c,a)[s.id]==='nb';return`<tr><td>${sLink(s)}</td>${a.tasks.map(t=>`<td>${cellIn(pm?'pt':'tg',c,a,s,pm?de(a.points?.[s.id]?.[t.id]??''):fmt(c,a.tg?.[s.id]?.[t.id]),`data-t="${t.id}" ${pm?'inputmode="decimal"':''} ${nb?'disabled':''}`)}</td>`).join('')}${lv('td',pm?'pct':'tgm',a.id,s.id)}${lv('td','res',a.id,s.id)}${nbBox(s)}</tr>`;}).join('')}</table></div></div>`;}
+  }
+  else if(ui.sub==='tasks'){const pm=a.mode==='tasks',sl=!pm||a.customW;
+    h+=`<div class="cols"><div class="card"><div class="ch"><h3>Aufgaben</h3>${tip(pm?'Standardmäßig zählt jede Aufgabe entsprechend ihrer Punktzahl. Mit „Eigene Gewichtung“ steuerst du den Anteil jeder Aufgabe per Regler – unabhängig von der Punktzahl.':'Mit den Reglern legst du fest, wie stark jede Aufgabe in die Gesamtbewertung eingeht. Die Auswirkung auf den Schnitt siehst du sofort rechts.')}<span class="grow"></span>
+        ${pm?pills('customW',a.customW?'1':'0',[['0','Nach Punkten'],['1','Eigene Gewichtung']],`data-a="${a.id}"`,'sm'):''}</div>
+      ${a.tasks.map(t=>`<div class="sl" style="grid-template-columns:minmax(110px,1fr) ${pm?'64px ':''}${sl?'minmax(120px,1.4fr) ':''}54px 34px">
+        <input type="text" data-ch="tName" data-a="${a.id}" data-t="${t.id}" value="${esc(t.name)}" aria-label="Aufgabenname">
+        ${pm?`<input class="cell" style="width:64px" data-ch="tMax" data-a="${a.id}" data-t="${t.id}" value="${de(t.max)}" title="Maximale Punktzahl" aria-label="Maximale Punktzahl">`:''}
+        ${sl?`<input type="range" min="0" max="100" step="5" data-in="tW" data-a="${a.id}" data-t="${t.id}" value="${+t.weight||0}" aria-label="Gewichtung ${esc(t.name)}">`:''}
+        ${lv('b','tshare',a.id,t.id)}<button class="btn sm danger" data-act="delT" data-a="${a.id}" data-t="${t.id}" title="Aufgabe löschen">✕</button></div>`).join('')||'<div class="empty">Noch keine Aufgaben.</div>'}
+      <p><button class="btn" data-act="addT" data-a="${a.id}">+ Aufgabe</button></p></div>
+      <div class="card"><div class="ch"><h3>Auswirkung</h3></div>${lv('div','amini',a.id)}</div></div>`;}
+  else if(ui.sub==='key'){const k=keyInfo(c,a);
+    h+=`<div class="cols"><div class="card"><div class="ch"><h3>Notenschlüssel</h3>${tip('Der Schlüssel ordnet dem erreichten Prozentwert eine Bewertung zu. Per Regler verschiebst du die Grenzen; alternativ gibst du feste Grenzwerte je Stufe vor.')}<span class="grow"></span>${pills('keyMode',k.manual?'manual':'auto',[['auto','Regler'],['manual','Feste Grenzwerte']],`data-a="${a.id}"`,'sm')}</div>
+      ${k.manual?'<p class="mute">Trage rechts für jede Stufe ein, ab wie viel Prozent sie erreicht ist.</p>':`
+        <div class="sl"><span>Über dem Strich (${esc(k.L[k.s].l)}) ab</span><input type="range" min="10" max="80" step="1" data-in="kPass" data-a="${a.id}" value="${k.P}" ${k.s===0?'disabled':''}>${lv('b','kv',a.id,'P')}</div>
+        <div class="sl"><span>Bestbewertung (${esc(k.L[k.L.length-1].l)}) ab</span><input type="range" min="50" max="100" step="1" data-in="kTop" data-a="${a.id}" value="${k.T}">${lv('b','kv',a.id,'T')}</div>
+        <p>Mindestens <input class="cell" data-ch="kMin" data-a="${a.id}" value="${a.key.minAbove||''}" placeholder="–"> Personen über dem Strich ${tip('Wird diese Anzahl mit der eingestellten Grenze nicht erreicht, senkt das Tool die Grenze automatisch so weit wie nötig.')}</p>`}
+      <p><label><input type="checkbox" data-ch="kRound" data-a="${a.id}" ${a.key.roundPct===false?'':'checked'}> Prozentwerte auf ganze Zahlen runden</label></p>
+      <p><button class="btn sm" data-act="keyReset" data-a="${a.id}">Standard wiederherstellen</button></p></div>
+      <div class="card">${lv('div','keytable',a.id)}</div></div>`;}
+  else h+=`<div class="card"><div class="row">
+      <label class="f">Bezeichnung<input type="text" data-ch="aName" data-a="${a.id}" value="${esc(a.name)}"></label>
+      <label class="f">Datum<input type="date" data-ch="aDate" data-a="${a.id}" value="${a.date||''}"></label>
+      ${isNum(c)?`<label class="f" title="Zählt diese Bewertung innerhalb der Kategorie mehrfach, hier z. B. 2 eintragen.">Gewicht in der Kategorie<input type="number" min="0" step="0.5" style="width:110px" data-ch="aWeight" data-a="${a.id}" value="${a.weight??1}"></label>`:''}
+      <label class="f">Zeitraum<select data-ch="aPeriod" data-a="${a.id}">${c.periods.map(p=>`<option value="${p.id}" ${p.id===a.period?'selected':''}>${esc(p.name)}</option>`).join('')}</select></label></div>
+      <p style="margin-top:18px"><label class="f">Art der Eingabe${pills('aMode',a.mode,isNum(c)?MODES:MODES.slice(0,2),`data-a="${a.id}"`)}</label></p>
+      <p style="margin-top:22px"><button class="btn danger" data-act="delA" data-a="${a.id}">Bewertung löschen</button></p></div>`;
+  return h;
+}
+function viewStudent(c,sid){
+  const s=c.students.find(x=>x.id===sid);if(!s){ui.detail=null;return viewOverview(c);}
+  const all0=allValues(c,sid),fc=c.categories.find(k=>k.id===ui.sf),all=fc?all0.filter(x=>x.cat===fc):all0,oc=oralCat(c),nbO=nbStat(c,sid,oc),nbA=nbStat(c,sid);
+  const nbTile=(o,l)=>tile(`${o.n}<span class="small mute"> von ${o.of}${o.of?` · ${fm(o.pct,0)} %`:''}</span>`,l);
+  const nbTiles=nbTile(nbO,`${esc(oc.name)}: nicht bewertet`)+nbTile(nbA,'Gesamt: nicht bewertet');
+  const filt=`<div class="bar-row">${pills('sf',fc?fc.id:'all',[['all','Alle Kategorien'],...c.categories.map(k=>[k.id,esc(k.name)])],'','sm')}</div>`;
+  let h=`<p><button class="link" data-act="back">← zurück</button></p><div class="bar-row"><h2>${esc(s.name)}</h2><span class="mute">${esc(pName(c))}</span></div>`;
+  if(isNum(c)){
+    const T=totals(c),me=T.find(o=>o.s.id===sid),ranked=T.filter(o=>o.t!=null),rk=me.t==null?'–':`${1+ranked.filter(o=>better(c,o.t,me.t)).length}<span class="small mute"> / ${ranked.length}</span>`;
+    const chrono=all.filter(x=>x.v!=null&&x.v!=='nb').sort((x,y)=>(x.a.date||'').localeCompare(y.a.date||''));
+    h+=`<div class="tiles">${tile(me.lv==null?'–':esc(fmt(c,me.lv)),'Gesamtnote','g')}${tile(fm(me.t),'Gesamt Ø','b',`Kurs-Ø ${fm(mean(ranked.map(o=>o.t)))}`)}${tile(rk,'Rang im Kurs')}${c.categories.map(k=>tile(fm(catMean(c,k,sid)),`Ø ${esc(k.name)}`,'',`Anteil ${k.weight} % · Kurs-Ø ${fm(mean(c.students.map(x=>catMean(c,k,x.id)).filter(x=>x!=null)))} · nicht bewertet: ${nbStat(c,sid,k).txt}`)).join('')}</div><div class="tiles" style="grid-template-columns:repeat(auto-fit,minmax(230px,280px))">${nbTiles}</div>${filt}
+      <div class="card"><div class="ch"><h3>Verlauf${fc?' · '+esc(fc.name):''}</h3>${tip('Blaue Linie: Bewertungen der Schülerin / des Schülers in zeitlicher Reihenfolge. Gestrichelt: Kurs-Ø der jeweiligen Bewertung.')}</div>${lineChart(c,chrono.map(x=>({label:x.a.name,y:num(c,x.v),y2:aMean(c,x.a),t:fmt(c,x.v)})))}</div>`;
+    if(c.periods.length>1){const D=trendData(c),i=c.students.indexOf(s);h+=`<div class="card"><div class="ch"><h3>Zeiträume</h3></div><div class="row">${D.map(d=>`<div class="tile" style="min-width:150px"><b>${gbadge(c,d.T[i].lv)}</b><span>${esc(d.p.name)} · Ø ${fm(d.T[i].t)}</span></div>`).join('')}</div></div>`;}
+  }else h+=`<div class="tiles">${SYM.slice().reverse().map(y=>tile(all0.filter(x=>x.v===y.v).length,'Anzahl '+y.l)).join('')}</div><div class="tiles" style="grid-template-columns:repeat(auto-fit,minmax(230px,280px))">${nbTiles}</div>${filt}`;
+  h+=`<div class="card"><div class="ch"><h3>Bewertungen${fc?' · '+esc(fc.name):''}</h3></div><div class="scroll"><table><tr><th>Bewertung</th><th>Kategorie</th><th>Datum</th><th>Bewertung</th>${isNum(c)?'<th>Kurs-Ø</th>':''}</tr>
+    ${all.map(x=>`<tr><td>${aLink(x.a)}</td><td>${esc(x.cat.name)}</td><td>${fdate(x.a.date)}</td><td>${gbadge(c,x.v)}</td>${isNum(c)?`<td>${fm(aMean(c,x.a))}</td>`:''}</tr>`).join('')||'<tr><td colspan="5" class="mute">Noch keine Bewertungen in diesem Zeitraum</td></tr>'}</table></div></div>
+    <div class="card"><div class="ch"><h3>Notizen</h3>${tip('Freie Notizen zu dieser Schülerin / diesem Schüler. Sie gelten für alle Zeiträume, werden mit dem Datenbestand gesichert und erscheinen nicht in Excel- oder PDF-Exporten.')}</div><textarea rows="5" data-ch="note" data-in="note" data-s="${s.id}" placeholder="Notizen …">${esc(s.note||'')}</textarea></div>`;
+  return h;
+}
+function viewSettings(c){
+  const L=levels(c),x=`<button class="btn sm danger" `;
+  let h=`<div class="bar-row">${pills('set',ui.set,[['course','Kurs'],['cats','Kategorien'],['periods','Zeiträume'],['students',`Schüler/innen<small>${c.students.length}</small>`]],'','sm')}</div><div class="card" style="max-width:760px">`;
+  if(ui.set==='cats')h+=`<div class="ch"><h3>Kategorien und Anteile</h3>${tip('Der Anteil bestimmt, wie stark der Mittelwert einer Kategorie in die Gesamtnote eingeht. Kategorien ohne Bewertung bleiben außen vor; es zählt das Verhältnis der übrigen Anteile.')}</div>
+    <table><tr><th>Kategorie</th><th>Anteil %</th><th></th></tr>${c.categories.map(k=>`<tr><td><input type="text" data-ch="catName" data-c="${k.id}" value="${esc(k.name)}"></td><td><input class="cell" data-ch="catW" data-c="${k.id}" value="${de(k.weight)}"></td><td>${k.oral?`<span class="small mute" title="Die mündliche Kategorie ist fest und kann nicht gelöscht werden. Name und Anteil lassen sich ändern.">fest</span>`:`${x}data-act="delCat" data-c="${k.id}" title="Kategorie löschen">✕</button>`}</td></tr>`).join('')}</table>
+    <p class="row" style="align-items:center"><button class="btn" data-act="addCat">+ Kategorie</button>${lv('span','wsum')}</p>`;
+  else if(ui.set==='periods')h+=`<div class="ch"><h3>Zeiträume</h3>${tip('Zeiträume (z. B. Halbjahre) werden getrennt gewertet: Jede Bewertung gehört zu genau einem Zeitraum, und die Gesamtnote wird je Zeitraum eigenständig berechnet. Der Reiter „Verlauf“ stellt die Zeiträume nebeneinander.')}</div>
+    <table>${c.periods.map(p=>`<tr><td><input type="text" data-ch="pName" data-p="${p.id}" value="${esc(p.name)}"></td><td class="mute">${c.categories.reduce((n,k)=>n+k.assessments.filter(a=>a.period===p.id).length,0)} Bewertungen</td><td>${c.periods.length>1?`${x}data-act="delP" data-p="${p.id}" title="Zeitraum löschen">✕</button>`:''}</td></tr>`).join('')}</table>
+    <p><button class="btn" data-act="addP">+ Zeitraum</button></p>`;
+  else if(ui.set==='students')h+=`<div class="cols" style="grid-template-columns:1fr 1fr"><div><table>${c.students.map((s,i)=>`<tr><td class="mute">${i+1}</td><td><input type="text" data-ch="stName" data-s="${s.id}" value="${esc(s.name)}"></td><td>${x}data-act="delS" data-s="${s.id}" title="Schüler/in löschen">✕</button></td></tr>`).join('')||'<tr><td class="mute">Noch niemand angelegt</td></tr>'}</table>
+    ${c.students.length>1?'<p><button class="btn sm" data-act="sortS">A–Z sortieren</button></p>':''}</div>
+    <div><label class="f">Namen hinzufügen – ein Name pro Zeile<textarea id="bulk" rows="9" placeholder="Nachname, Vorname"></textarea></label><p class="row" style="align-items:center"><button class="btn pri" data-act="addS">Hinzufügen</button><button class="btn" data-act="csv">CSV-Datei importieren</button>${tip('Liest Namen aus einer CSV-Datei (z. B. Export aus der Schulverwaltung oder aus Excel). Trennzeichen, Überschriftenzeile und Namensspalten werden automatisch erkannt; vor dem Import siehst du eine Vorschau und kannst die Zuordnung anpassen.')}</p></div></div>`;
+  else h+=`<p><label class="f">Bezeichnung<input type="text" data-ch="cName" value="${esc(c.name)}"></label></p>
+    <div class="f" style="margin:14px 0"><span class="small mute">Notenskala</span><div class="row" style="align-items:center;margin-top:4px">${pills('scale',c.scale,Object.entries(SCALES))} ${tip('Zwischen Noten und Punkten bleiben alle Bewertungen erhalten (2+ entspricht 12 Punkten). Symbol-Bewertungen werden getrennt geführt und erscheinen wieder, wenn du zurückschaltest.')}</div></div>
+    ${c.scale==='noten'?`<p><label><input type="checkbox" data-ch="tendenz" ${c.tendenz?'checked':''}> Tendenznoten (+ / −) verwenden</label></p>`:''}
+    <p><label class="f" style="max-width:220px">„Über dem Strich“ ab<select data-ch="strich">${[...L].reverse().map(l=>`<option value="${l.v}" ${String(l.v)===String(c.strich[c.scale])?'selected':''}>${esc(l.l)}</option>`).join('')}</select></label></p>
+    <p style="margin-top:22px"><button class="btn danger" data-act="delCourse">Kurs löschen</button></p>`;
+  return h+'</div>';
+}
+
+/* ============ Live-Bereiche (werden bei Eingaben ohne Neuaufbau aktualisiert) ============ */
+const LIVE={
+  catmean(cid,sid){const c=course(),k=c.categories.find(x=>x.id===cid);return isNum(c)?`<b>${fm(catMean(c,k,sid))}</b>`:symHtml(c,sortedA(c,k).map(a=>value(c,a,sid)));},
+  nbc(cid,sid){const c=course(),o=nbStat(c,sid,c.categories.find(k=>k.id===cid));return o.n?`<span title="${fm(o.pct,0)} % nicht bewertet">${o.n} / ${o.of}</span>`:'<span class="mute">–</span>';},
+  amean(aid){const c=course();return fm(aMean(c,findA(c,aid).a));},
+  aname(aid){return esc(findA(course(),aid).a.name);},
+  wsum(){const s=course().categories.reduce((x,k)=>x+(+k.weight||0),0);return!isNum(course())?'<span class="mute">Bei der Symbol-Skala ohne Bedeutung</span>':`<span class="${s===100?'mute':'warn'}">Summe ${de(s)} %${s===100?'':' – sollte 100 % ergeben'}</span>`;},
+  thead(aid,tid){const a=findA(course(),aid).a,t=a.tasks.find(x=>x.id===tid);return`${esc(t.name)}<small>${a.mode==='tasks'?'max. '+de(t.max):Math.round(share(a,t))+' %'}</small>`;},
+  tshare(aid,tid){const a=findA(course(),aid).a;return Math.round(share(a,a.tasks.find(x=>x.id===tid)))+' %';},
+  pct(aid,sid){const c=course(),a=findA(c,aid).a,p=taskPct(a,sid);return G(c,a)[sid]==='nb'||p==null?'<span class="mute">–</span>':fm(p,a.key.roundPct===false?1:0)+' %';},
+  tgm(aid,sid){const c=course(),a=findA(c,aid).a;return G(c,a)[sid]==='nb'?'<span class="mute">–</span>':fm(tgMean(c,a,sid));},
+  res(aid,sid){const c=course();return gbadge(c,value(c,findA(c,aid).a,sid));},
+  kv(aid,w){const c=course(),k=keyInfo(c,findA(c,aid).a);return w==='T'?k.T+' %':k.lowered?`<span class="warn" title="automatisch gesenkt, damit die Mindestanzahl erreicht wird">${fm(k.Pe,0)} %</span>`:k.P+' %';},
+  amini(aid){const c=course(),{a}=findA(c,aid),vals=graded(c,a),st=stats(c,vals);if(!st.n)return'<div class="empty">Noch keine Bewertungen eingetragen.</div>';
+    return`<div class="tiles">${isNum(c)?tile(fm(st.mean),'Ø','b'):''}${tile(st.over,'über dem Strich','g')}${tile(st.under,'unter dem Strich')}</div>${barChart(dist(c,vals))}`;},
+  keytable(aid){const c=course(),a=findA(c,aid).a,k=keyInfo(c,a),vals=graded(c,a),st=stats(c,vals),mx=a.tasks.reduce((s,t)=>s+(+t.max||0),0);
+    let h=`<div class="tiles">${isNum(c)?tile(fm(st.mean),'Ø','b'):''}${tile(st.over,'über dem Strich','g')}${tile(st.under,'unter dem Strich')}</div>${k.lowered?`<p class="warn small">Grenze automatisch von ${k.P} % auf ${fm(k.Pe,0)} % gesenkt.</p>`:''}
+      <div class="scroll"><table><tr><th>Bewertung</th><th>ab %</th>${a.customW?'':'<th>ab Punkten</th>'}<th>Anzahl</th></tr>`;
+    for(let i=k.L.length-1;i>=0;i--){const n=vals.filter(v=>v===k.L[i].v).length;
+      h+=`<tr ${i===k.s?'style="box-shadow:inset 0 -2px var(--coral)" title="Darunter verläuft der Strich"':''}><td>${gbadge(c,k.L[i].v)}</td><td>${k.manual&&i>0?`<input class="cell" data-ch="kMan" data-a="${aid}" data-i="${i}" value="${de(k.th[i])}">`:de(k.th[i])}</td>${a.customW?'':`<td>${fm(k.th[i]*mx/100,1)}</td>`}<td style="text-align:left">${n?`<span class="qbar" style="width:${n*9}px"></span> ${n}`:''}</td></tr>`;}
+    return h+'</table></div>';},
+  astats(aid){const c=course(),{a}=findA(c,aid),vals=graded(c,a),st=stats(c,vals),nb=c.students.filter(s=>value(c,a,s.id)==='nb').length,open=c.students.length-st.n-nb;
+    if(!st.n)return`<div class="card empty">Noch keine Bewertungen eingetragen.<br><br><button class="btn pri" data-act="sub" data-v="${a.mode!=='direct'&&!a.tasks.length?'tasks':'input'}">Jetzt eintragen</button></div>`;
+    let h=`<div class="tiles">${tile(st.n,'bewertet','',`${nb} nicht bewertet${open?` · ${open} noch offen`:''}`)}${isNum(c)?tile(fm(st.mean),'Ø','b',`Median ${fm(st.median)} · beste ${fmt(c,st.best)} · schlechteste ${fmt(c,st.worst)}`):''}${tile(st.over,'über dem Strich','g')}${tile(`${st.under}<span class="small mute"> · ${fm(st.under/st.n*100,0)} %</span>`,'unter dem Strich')}</div>
+      <div class="cols"><div class="card"><div class="ch"><h3>${isNum(c)?'Notenspiegel':'Verteilung'}</h3></div>${barChart(dist(c,vals))}</div>`;
+    if(a.mode!=='direct'&&a.tasks.length)h+=`<div class="card"><div class="ch"><h3>Aufgaben</h3>${tip(a.mode==='tasks'?'Lösungsquote: durchschnittlich erreichter Anteil der Punkte je Aufgabe.':'Durchschnitt der Teilnoten je Aufgabe und ihr Gewicht in der Gesamtbewertung.')}</div><table><tr><th>Aufgabe</th><th>Gewicht</th><th>${a.mode==='tasks'?'Lösungsquote':'Ø'}</th>${a.mode==='tasks'?'<th></th>':''}</tr>
+      ${a.tasks.map(t=>{const q=taskQuote(c,a,t);return`<tr><td>${esc(t.name)}</td><td>${Math.round(share(a,t))} %</td>${a.mode==='tasks'?`<td title="Ø ${fm(q.avg,1)} von ${de(t.max)} Punkten">${fm(q.pct,0)} %</td><td style="text-align:left"><span class="qbar" style="width:${Math.round((q.pct||0)*1.2)}px"></span></td>`:`<td>${fm(q.avg)}</td>`}</tr>`;}).join('')}</table></div>`;
+    return h+'</div>';}
+};
+
+/* ============ Aktionen ============ */
+const pnum=s=>{s=String(s).trim().replace(',','.');if(s==='')return null;const n=Number(s);return isFinite(n)&&n>=0?n:undefined;};
+const bad=(el,msg)=>{el.classList.add('bad');el.title=msg;toast(msg);};
+const good=el=>{el.classList.remove('bad');el.removeAttribute('title');};
+const newA=(c,name)=>({id:uid(),name,date:today(),weight:1,mode:'direct',period:c.period,grades:{},tasks:[],points:{},tg:{},customW:false,key:{mode:'auto'}});
+const newCourseObj=(name,scale)=>{const p=[{id:uid(),name:'1. Halbjahr'},{id:uid(),name:'2. Halbjahr'}];return{id:uid(),name,scale,tendenz:true,strich:{noten:4,punkte:5,symbole:'o'},students:[],periods:p,period:p[0].id,
+  categories:[{id:uid(),name:'Klausuren',weight:50,assessments:[]},{id:uid(),name:'Mündliche Noten',weight:50,oral:true,assessments:[]}]};};
+const addNames=(c,txt)=>txt.split(/\r?\n/).map(s=>s.trim()).filter(Boolean).forEach(n=>c.students.push({id:uid(),name:n}));
+const singular=n=>/ündlich/.test(n)?'Mündlich':n.replace(/(arbeit|ur|ung)en$/,'$1').replace(/([^s])s$/,'$1');
+const done=full=>{save();full?render():refreshLive();};
+const A=el=>findA(course(),el.dataset.a).a, Tk=el=>A(el).tasks.find(t=>t.id===el.dataset.t);
+
+const CH={
+  course(el){db.active=el.value;ui.detail=null;ui.cat=null;done(1);},
+  period(el){course().period=el.value;ui.detail=null;done(1);},
+  grade(el){const c=course(),a=A(el),v=parse(c,el.value);if(v===undefined)return bad(el,`Ungültige Eingabe – erlaubt: ${hint(c)} oder „nb“.`);
+    good(el);if(v==null)delete G(c,a)[el.dataset.s];else G(c,a)[el.dataset.s]=v;el.value=fmt(c,v);done();},
+  pt(el){const a=A(el),t=Tk(el),v=pnum(el.value);if(v===undefined)return bad(el,'Bitte eine Punktzahl eingeben.');if(v!=null&&v>t.max)return bad(el,`Höchstens ${de(t.max)} Punkte bei „${t.name}“.`);
+    good(el);const p=(a.points[el.dataset.s]??={});if(v==null)delete p[t.id];else p[t.id]=v;done();},
+  tg(el){const c=course(),a=A(el),v=parse(c,el.value);if(v===undefined||v==='nb')return bad(el,`Ungültige Eingabe – erlaubt: ${hint(c)}.`);
+    good(el);const p=(a.tg[el.dataset.s]??={});if(v==null)delete p[el.dataset.t];else p[el.dataset.t]=v;el.value=fmt(c,v);done();},
+  nb(el){const c=course(),a=A(el);if(el.checked)G(c,a)[el.dataset.s]='nb';else delete G(c,a)[el.dataset.s];done(1);},
+  aName(el){A(el).name=el.value.trim()||'Bewertung';done();},
+  aDate(el){A(el).date=el.value;done(1);},
+  aWeight(el){A(el).weight=pnum(el.value)??1;done();},
+  aPeriod(el){const c=course();A(el).period=el.value;c.period=el.value;done(1);toast(`Verschoben nach „${pName(c)}“.`);},
+  tName(el){Tk(el).name=el.value.trim()||'Aufgabe';done();},
+  tMax(el){const v=pnum(el.value);if(!v)return bad(el,'Die maximale Punktzahl muss größer als 0 sein.');good(el);Tk(el).max=v;done();},
+  kMin(el){const v=pnum(el.value);if(v===undefined)return bad(el,'Bitte eine Anzahl eingeben.');good(el);A(el).key.minAbove=v?Math.round(v):0;done();},
+  kRound(el){A(el).key.roundPct=el.checked;done(1);},
+  kMan(el){const v=pnum(el.value);if(v==null||v>100)return bad(el,'Bitte einen Prozentwert zwischen 0 und 100 eingeben.');good(el);A(el).key.manual[+el.dataset.i]=v;done(1);},
+  cName(el){course().name=el.value.trim()||'Kurs';done(1);},
+  tendenz(el){course().tendenz=el.checked;done(1);},
+  strich(el){const c=course();c.strich[c.scale]=isNum(c)?+el.value:el.value;done(1);},
+  catName(el){course().categories.find(k=>k.id===el.dataset.c).name=el.value.trim()||'Kategorie';done();},
+  catW(el){const v=pnum(el.value);if(v===undefined)return bad(el,'Bitte eine Zahl eingeben.');good(el);course().categories.find(k=>k.id===el.dataset.c).weight=v??0;done();},
+  pName(el){course().periods.find(p=>p.id===el.dataset.p).name=el.value.trim()||'Zeitraum';done(1);},
+  note(el){course().students.find(s=>s.id===el.dataset.s).note=el.value;save();},
+  stName(el){course().students.find(s=>s.id===el.dataset.s).name=el.value.trim()||'Ohne Namen';done();}
+};
+const IN={
+  kPass(el){const a=A(el);a.key.pass=+el.value;if((a.key.top??100)<a.key.pass)a.key.top=a.key.pass;done();},
+  kTop(el){const a=A(el);a.key.top=Math.max(+el.value,keyInfo(course(),a).Pe);done();},
+  tW(el){Tk(el).weight=+el.value;done();},
+  note(el){CH.note(el);}
+};
+const go=(o)=>{Object.assign(ui,o);render();scrollTo(0,0);};
+const ACT={
+  tab(el){go({tab:el.dataset.v,detail:null});}, sub(el){go({sub:el.dataset.v});}, cat(el){go({cat:el.dataset.v});}, sf(el){ui.sf=el.dataset.v;render();}, csv(){$('#csv').click();}, set(el){go({set:el.dataset.v});},
+  goSet(el){go({tab:'settings',set:el.dataset.v,detail:null});}, ovd(el){ui.ovd=el.dataset.v==='1';render();},
+  back(){go({detail:null});},
+  openA(el){const c=course(),a=A(el);go({detail:{type:'assessment',aid:a.id},sub:graded(c,a).length?'stats':a.mode!=='direct'&&!a.tasks.length?'cfg':'input',tab:'grades',cat:findA(c,a.id).cat.id});},
+  openS(el){go({detail:{type:'student',sid:el.dataset.s},sf:'all'});},
+  xlsx(el){exportXlsx(el.dataset.v);}, pdf(el){exportPdf(el.dataset.v);}, backup(){exportJson();}, restore(){$('#file').click();},
+  demo(){const c=demoCourse();db.courses.push(c);db.active=c.id;done(1);},
+  newCourse(){const d=$('#dlg');d.innerHTML=`<form method="dialog"><h2 style="margin-bottom:16px">Kurs anlegen</h2>
+    <p><label class="f">Bezeichnung<input type="text" id="ncName" required placeholder="z. B. Mathematik 9b"></label></p>
+    ${db.courses.length?`<p><label class="f">Einstellungen übernehmen von<select id="ncSrc" onchange="document.getElementById('ncScaleP').hidden=!!this.value"><option value="">– nicht übernehmen –</option>${db.courses.map(k=>`<option value="${k.id}">${esc(k.name)}</option>`).join('')}</select></label>
+      <span class="small mute">Übernommen werden Notenskala, Kategorien mit Anteilen und Zeiträume – keine Namen, keine Noten.</span></p>`:''}
+    <p id="ncScaleP"><label class="f">Notenskala<select id="ncScale">${Object.entries(SCALES).map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></label></p>
+    <p><label class="f">Schüler/innen – ein Name pro Zeile, später ergänzbar<textarea id="ncSt" rows="7"></textarea></label></p>
+    <div class="row" style="justify-content:flex-end"><button class="btn" value="cancel" formnovalidate>Abbrechen</button><button class="btn pri" value="ok">Anlegen</button></div></form>`;
+    d.onclose=()=>{if(d.returnValue!=='ok')return;const c=newCourseObj($('#ncName').value.trim()||'Neuer Kurs',$('#ncScale').value),src=db.courses.find(k=>k.id===$('#ncSrc')?.value);
+      if(src){c.scale=src.scale;c.tendenz=src.tendenz;c.strich={...src.strich};c.categories=src.categories.map(k=>({id:uid(),name:k.name,weight:k.weight,oral:k.oral,assessments:[]}));c.periods=src.periods.map(p=>({id:uid(),name:p.name}));c.period=c.periods[0].id;}
+      addNames(c,$('#ncSt').value);db.courses.push(c);db.active=c.id;ui.detail=null;ui.cat=null;ui.tab=c.students.length?'grades':'settings';ui.set='students';done(1);};d.showModal();},
+  delCourse(){const c=course();if(!confirm(`Kurs „${c.name}“ mit allen Bewertungen endgültig löschen?`))return;db.courses=db.courses.filter(k=>k!==c);db.active=db.courses[0]?.id??null;ui.detail=null;ui.tab='overview';done(1);},
+  scale(el){course().scale=el.dataset.v;done(1);},
+  addCat(){course().categories.push({id:uid(),name:'Neue Kategorie',weight:0,assessments:[]});done(1);},
+  delCat(el){const c=course(),k=c.categories.find(x=>x.id===el.dataset.c);if(k.oral)return;if(k.assessments.length&&!confirm(`Kategorie „${k.name}“ mit ${k.assessments.length} Bewertung(en) in allen Zeiträumen löschen?`))return;c.categories=c.categories.filter(x=>x!==k);done(1);},
+  addP(){const c=course();c.periods.push({id:uid(),name:`${c.periods.length+1}. Halbjahr`});done(1);},
+  delP(el){const c=course(),p=c.periods.find(x=>x.id===el.dataset.p),n=c.categories.reduce((s,k)=>s+k.assessments.filter(a=>a.period===p.id).length,0);
+    if(n&&!confirm(`Zeitraum „${p.name}“ mit ${n} Bewertung(en) endgültig löschen?`))return;c.categories.forEach(k=>k.assessments=k.assessments.filter(a=>a.period!==p.id));c.periods=c.periods.filter(x=>x!==p);if(c.period===p.id)c.period=c.periods[0].id;done(1);},
+  addS(){const t=$('#bulk').value;if(!t.trim())return toast('Bitte mindestens einen Namen eingeben.');addNames(course(),t);done(1);},
+  delS(el){const c=course(),s=c.students.find(x=>x.id===el.dataset.s);if(!confirm(`„${s.name}“ mit allen Bewertungen löschen?`))return;c.students=c.students.filter(x=>x!==s);c.categories.forEach(k=>k.assessments.forEach(a=>{delete a.grades[s.id];delete a.sym?.[s.id];delete a.points[s.id];delete a.tg[s.id];}));done(1);},
+  sortS(){course().students.sort((a,b)=>a.name.localeCompare(b.name,'de'));done(1);},
+  addA(el){const c=course(),k=c.categories.find(x=>x.id===el.dataset.c);k.assessments.push(newA(c,`${singular(k.name)} ${sortedA(c,k).length+1}`));done(1);},
+  delA(el){const c=course(),{cat,a}=findA(c,el.dataset.a);if(!confirm(`Bewertung „${a.name}“ löschen?`))return;cat.assessments=cat.assessments.filter(x=>x!==a);ui.detail=null;done(1);},
+  aMode(el){const a=A(el);a.mode=el.dataset.v;if(a.mode!=='direct'){if(!a.tasks.length)a.tasks=[1,2,3].map(i=>({id:uid(),name:'Aufgabe '+i}));a.tasks.forEach(t=>{t.max??=10;t.weight??=50;});ui.sub='tasks';}done(1);},
+  customW(el){const a=A(el);a.customW=el.dataset.v==='1';if(a.customW){const mx=a.tasks.reduce((s,t)=>s+t.max,0)||1;a.tasks.forEach(t=>t.weight=Math.round(t.max/mx*20)*5);}done(1);},
+  addT(el){const a=A(el);a.tasks.push({id:uid(),name:'Aufgabe '+(a.tasks.length+1),max:10,weight:50});done(1);},
+  delT(el){const a=A(el);a.tasks=a.tasks.filter(t=>t.id!==el.dataset.t);[a.points,a.tg].forEach(o=>Object.values(o).forEach(p=>delete p[el.dataset.t]));done(1);},
+  keyMode(el){const c=course(),a=A(el);if(el.dataset.v==='manual'){a.key.mode='auto';memo.clear();a.key.manual=keyInfo(c,a).th.slice();}a.key.mode=el.dataset.v;done(1);},
+  keyReset(el){const a=A(el);a.key={mode:'auto',roundPct:a.key.roundPct};done(1);}
+};
+document.addEventListener('click',e=>{
+  document.querySelectorAll('details.menu[open]').forEach(d=>{if(!d.contains(e.target)||e.target.closest('.pop button'))d.open=false;});
+  const el=e.target.closest('[data-act]');if(el&&ACT[el.dataset.act]){if(el.closest('form'))e.preventDefault();ACT[el.dataset.act](el);}});
+document.addEventListener('change',e=>{const el=e.target.closest('[data-ch]');if(el)CH[el.dataset.ch](el);});
+document.addEventListener('input',e=>{const el=e.target.closest('[data-in]');if(el)IN[el.dataset.in](el);});
+document.addEventListener('keydown',e=>{const el=e.target;if(!el.matches?.('input.cell')||!['Enter','ArrowDown','ArrowUp'].includes(e.key))return;
+  const td=el.closest('td'),tr=td?.parentElement;if(!tr)return;const i=[...tr.children].indexOf(td);let r=tr;
+  do{r=e.key==='ArrowUp'?r.previousElementSibling:r.nextElementSibling;}while(r&&!r.children[i]?.querySelector('input.cell:not(:disabled)'));
+  const n=r?.children[i]?.querySelector('input.cell');if(n){e.preventDefault();n.focus();n.select();}});
+window.addEventListener('afterprint',()=>{$('#print').innerHTML='';});
+
+/* ============ Beispielkurs ============ */
+function demoCourse(){
+  const c=newCourseObj('Mathematik 10b (Beispiel)','noten'),[h1,h2]=c.periods;
+  c.categories=[{id:uid(),name:'Klassenarbeiten',weight:50,assessments:[]},{id:uid(),name:'Mündliche Noten',weight:30,oral:true,assessments:[]},{id:uid(),name:'Tests',weight:20,assessments:[]}];
+  addNames(c,'Aydin, Elif\nBauer, Jonas\nBecker, Mia\nBraun, Luca\nDemir, Can\nFischer, Lena\nHoffmann, Paul\nKaya, Leyla\nKlein, Finn\nKoch, Emma\nKrüger, Noah\nLange, Sophie\nMeier, Ben\nNeumann, Hannah\nPetrov, Maxim\nRichter, Lara\nSchmidt, Tim\nSchulz, Nele\nWagner, Leon\nWeber, Clara\nWolf, Jan\nZimmermann, Ida');
+  const P=[[5,8.5,12,5,12.5,5.5,11,2.5,4,6.5,10,8,6,8,11,4,5,8.5,8.5,9,1.5,2.5],[19,19.5,11,16.5,19,25,13,20,14,19,15,18.5,20,16,14.5,16.5,24,18,17.5,19.5,8,12.5],[0,19.5,14,12,20,32,13.5,15,18,24,20,22,13,16,31,22,13,11.5,24,24,10,13]];
+  const ka=newA(c,'Klassenarbeit 1');ka.mode='tasks';ka.date='2026-09-18';ka.customW=true;ka.tasks=[[15,30],[25,40],[35,30]].map(([max,weight],i)=>({id:uid(),name:'Aufgabe '+(i+1),max,weight}));
+  c.students.forEach((s,i)=>{ka.points[s.id]={};ka.tasks.forEach((t,j)=>ka.points[s.id][t.id]=P[j][i]);});
+  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647,cl=x=>Math.max(0,Math.min(15,x));
+  const base=c.students.map((s,i)=>Math.round(P.reduce((x,p,j)=>x+p[i]/[15,25,35][j],0)/3*15));
+  const mk=(name,date,nbAt,per=h1,off=0)=>{const a=newA(c,name);a.period=per.id;a.date=date;c.students.forEach((s,i)=>a.grades[s.id]=i===nbAt?'nb':cl(base[i]+off+Math.round(rnd()*5-2)));return a;};
+  const tg=newA(c,'Klassenarbeit 2');tg.mode='tgrades';tg.date='2026-10-06';tg.tasks=[['Rechnen',50],['Textaufgabe',30],['Beweis',20]].map(([name,weight])=>({id:uid(),name,weight,max:10}));
+  c.students.forEach((s,i)=>{tg.tg[s.id]={};tg.tasks.forEach((t,j)=>tg.tg[s.id][t.id]=cl(base[i]+2-2*j+Math.round(rnd()*4-2)));});
+  c.categories[0].assessments.push(ka,tg,mk('Klassenarbeit 1','2027-03-04',-1,h2,1),mk('Klassenarbeit 2','2027-05-12',-1,h2,2));
+  c.categories[1].assessments.push(mk('Mündlich 1','2026-09-08',3),mk('Mündlich 2','2026-09-22',-1),mk('Mündlich 3','2026-10-05',11),mk('Mündlich 1','2027-02-18',-1,h2,1),mk('Mündlich 2','2027-04-20',5,h2,0));
+  c.categories[2].assessments.push(mk('Test 1','2026-09-29',17),mk('Test 1','2027-03-22',-1,h2,-1));
+  return c;
+}
+render();
+if(location.protocol==='https:'){navigator.serviceWorker?.register('sw.js').catch(()=>{});navigator.storage?.persist?.();}
+</script>
+</body>
+</html>

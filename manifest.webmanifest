@@ -1,0 +1,23 @@
+{
+ "name": "Summa cum Laura",
+ "short_name": "Summa cum Laura",
+ "lang": "de",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#e6f7ea",
+ "theme_color": "#cfeeda",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
